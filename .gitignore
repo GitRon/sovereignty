@@ -1,0 +1,23 @@
+*~
+*.pyc
+.idea
+.webassets-cache
+.sonar
+.DS_Store
+/staticfiles
+/static/bundles/*
+/media/
+/dev.db
+requirements/local.txt
+/logs/*
+!/logs/.gitkeep
+/*.db
+*.sqlite3
+
+# NPM
+/node_modules/
+
+# docker
+/apps/config/.env
+celerybeat.pid
+celerybeat-schedule
