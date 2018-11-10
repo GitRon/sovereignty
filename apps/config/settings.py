@@ -11,26 +11,42 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+import environ
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Base paths
+ROOT_DIR = environ.Path(__file__) - 2
+APPS_DIR = ROOT_DIR.path('../')
 
+env = environ.Env(
+    # django
+    DJANGO_DEBUG=(bool, False),
+    DJANGO_THUMBNAIL_DEBUG=(bool, False),
+    DJANGO_SECRET_KEY=(str, 'xsol_k1p3cd1!g&3owtw1)etfy8c=^ts#mk^rm%9_3*pp9i@7p'),
+    DJANGO_ADMINS=(list, []),
+    DJANGO_ALLOWED_HOSTS=(list, ['127.0.0.1', 'localhost']),
+    DJANGO_SESSION_COOKIE_SECURE=(bool, True),
+    DJANGO_SERVER_URL=(str, 'http://localhost:8000'),
+    # Files
+    DJANGO_STATIC_ROOT=(str, str(APPS_DIR('staticfiles'))),
+    DJANGO_MEDIA_ROOT=(str, str(APPS_DIR('media'))),
+    # Database
+    DJANGO_DATABASE_URL=(str, 'sqlite://sovereignty.db'),
+)
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
+environ.Env.read_env()
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'xsol_k1p3cd1!g&3owtw1)etfy8c=^ts#mk^rm%9_3*pp9i@7p'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
-
+DEBUG = env.bool("DJANGO_DEBUG")
+THUMBNAIL_DEBUG = env.bool("DJANGO_THUMBNAIL_DEBUG")
+SECRET_KEY = env('DJANGO_SECRET_KEY')
+ADMINS = tuple([tuple(admins.split(':')) for admins in env.list('DJANGO_ADMINS')])
+ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS')
+SESSION_COOKIE_SECURE = env.bool('DJANGO_SESSION_COOKIE_SECURE')
+SERVER_URL = env('DJANGO_SERVER_URL')
 
 # Application definition
 
 INSTALLED_APPS = [
+    # django
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -38,7 +54,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'apps.config'
+    # Third party
+
+    # Local
+    'apps.config',
+    'apps.location',
+    'apps.naming',
+    'apps.person',
 ]
 
 MIDDLEWARE = [
@@ -71,21 +93,20 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'apps.config.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
+# Database
+DATABASE_PARAMS = env.db('DJANGO_DATABASE_URL')
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    'default': DATABASE_PARAMS
 }
 
+if DATABASES['default']['ENGINE'] != 'django.db.backends.sqlite3':
+    DATABASES['default']['OPTIONS'] = {'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -101,13 +122,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
+LANGUAGE_CODE = 'de-at'
 
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Berlin'
 
 USE_I18N = True
 
@@ -115,8 +134,11 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
-
+STATIC_ROOT = env('DJANGO_STATIC_ROOT')
 STATIC_URL = '/static/'
+
+# Media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = env('DJANGO_MEDIA_ROOT')
