@@ -1,19 +1,24 @@
 from django.db import models
 
-"""
-TODO:
-    - name parts need to be m/w/x
-"""
+import apps.person.settings as ps
 
 
-class PersonNamePrefix(models.Model):
+class PersonName(models.Model):
+    name = models.CharField(max_length=20)
+    gender = models.PositiveSmallIntegerField(choices=ps.GENDER_CHOICES)
+
+    def __str__(self):
+        return self.name
+
+
+class LocationNamePrefix(models.Model):
     text = models.CharField(max_length=20)
 
     def __str__(self):
         return self.text
 
 
-class PersonNamePostfix(models.Model):
+class LocationNamePostfix(models.Model):
     text = models.CharField(max_length=20)
 
     def __str__(self):

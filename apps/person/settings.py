@@ -1,0 +1,6 @@
+GENDER_MALE = 1
+GENDER_FEMALE = 2
+GENDER_CHOICES = (
+    (GENDER_MALE, 'male'),
+    (GENDER_FEMALE, 'female')
+)

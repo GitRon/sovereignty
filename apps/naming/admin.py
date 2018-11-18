@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from apps.naming.models import PersonNamePrefix, PersonNamePostfix
+from apps.naming.models import LocationNamePostfix, PersonName, LocationNamePrefix
 
-admin.site.register(PersonNamePrefix)
-admin.site.register(PersonNamePostfix)
+admin.site.register(PersonName)
+admin.site.register(LocationNamePrefix)
+admin.site.register(LocationNamePostfix)
