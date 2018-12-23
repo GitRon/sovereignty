@@ -12,13 +12,17 @@ class PersonNameService(object):
 
 
 class LocationNameService(object):
+    MAX_ITERATIONS = 1000
 
     @staticmethod
     def create_name():
         prefix = postfix = LocationNamePrefix(text='')
         name = ''
-        # todo count iterations
+        iteration = 0
         while len(name) == 0 or County.objects.filter(name=name).exists():
+            iteration += 1
+            if iteration > LocationNameService.MAX_ITERATIONS:
+                raise Exception('County-Namepool is empty. Add more names!')
             while SequenceMatcher(None, prefix.text.lower(), postfix.text.lower()).ratio() > 0.2:
                 prefix = LocationNamePrefix.objects.order_by('?').first()
                 postfix = LocationNamePostfix.objects.order_by('?').first()

@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WIP: Sovereignty</title>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <link rel="SHORTCUT ICON" href="{% static 'img/favicon.ico' %}">
+    <script type="text/javascript" src="{% static 'jquery/dist/jquery.slim.js' %}"></script>
+    <script type="text/javascript" src="{% static 'materialize-css/dist/js/materialize.js' %}"></script>
+    {% block js %}{% endblock %}
+    <link rel="stylesheet" href="{% static 'materialize-css/dist/css/materialize.css' %}">
+    {% block css %}{% endblock %}
+    <!-- Mobile Specific Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=0.5">
+</head>
+<body>
+<div class="container">
+    <!-- Page Content goes here -->
+    {% block content %}{% endblock %}
+</div>
+</body>
+</html>

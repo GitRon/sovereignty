@@ -1,0 +1,16 @@
+{
+  "name": "sovereignty",
+  "version": "1.0.0",
+  "description": "WIP: Sovereignty",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.ambient-innovation.com/ronnyprojects/sovereignty.git"
+  },
+  "author": "Ronny Vedrilla",
+  "devDependencies": {},
+  "dependencies": {
+    "jquery": "^3.3.1",
+    "materialize-css": "^1.0.0"
+  }
+}
