@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+import sys
+
 import environ
 
 # Base paths
@@ -42,6 +44,11 @@ ADMINS = tuple([tuple(admins.split(':')) for admins in env.list('DJANGO_ADMINS')
 ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS')
 SESSION_COOKIE_SECURE = env.bool('DJANGO_SESSION_COOKIE_SECURE')
 SERVER_URL = env('DJANGO_SERVER_URL')
+
+IS_TESTING = False
+if 'test' in sys.argv or 'test_coverage' in sys.argv:
+    IS_TESTING = True
+
 
 # Application definition
 

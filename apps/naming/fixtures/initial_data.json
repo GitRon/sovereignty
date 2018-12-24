@@ -136,21 +136,21 @@
     "model": "naming.locationnameprefix",
     "pk": 12,
     "fields": {
-      "text": "Ludwig"
+      "text": "Ludwigs"
     }
   },
   {
     "model": "naming.locationnameprefix",
     "pk": 13,
     "fields": {
-      "text": "Karl"
+      "text": "Karls"
     }
   },
   {
     "model": "naming.locationnameprefix",
     "pk": 14,
     "fields": {
-      "text": "Otto"
+      "text": "Ottos"
     }
   },
   {
@@ -298,6 +298,132 @@
     "pk": 35,
     "fields": {
       "text": "Hall"
+    }
+  },
+  {
+    "model": "naming.locationnameprefix",
+    "pk": 36,
+    "fields": {
+      "text": "Tannen"
+    }
+  },
+  {
+    "model": "naming.locationnameprefix",
+    "pk": 37,
+    "fields": {
+      "text": "Nieder"
+    }
+  },
+  {
+    "model": "naming.locationnameprefix",
+    "pk": 38,
+    "fields": {
+      "text": "Ober"
+    }
+  },
+  {
+    "model": "naming.locationnameprefix",
+    "pk": 39,
+    "fields": {
+      "text": "Hohen"
+    }
+  },
+  {
+    "model": "naming.locationnameprefix",
+    "pk": 40,
+    "fields": {
+      "text": "Lichten"
+    }
+  },
+  {
+    "model": "naming.locationnameprefix",
+    "pk": 41,
+    "fields": {
+      "text": "Kreiers"
+    }
+  },
+  {
+    "model": "naming.locationnameprefix",
+    "pk": 42,
+    "fields": {
+      "text": "Meyers"
+    }
+  },
+  {
+    "model": "naming.locationnameprefix",
+    "pk": 43,
+    "fields": {
+      "text": "Ove"
+    }
+  },
+  {
+    "model": "naming.locationnameprefix",
+    "pk": 44,
+    "fields": {
+      "text": "Sch\u00f6n"
+    }
+  },
+  {
+    "model": "naming.locationnameprefix",
+    "pk": 45,
+    "fields": {
+      "text": "Bar"
+    }
+  },
+  {
+    "model": "naming.locationnameprefix",
+    "pk": 46,
+    "fields": {
+      "text": "F\u00fcrsten"
+    }
+  },
+  {
+    "model": "naming.locationnameprefix",
+    "pk": 47,
+    "fields": {
+      "text": "Herzogs"
+    }
+  },
+  {
+    "model": "naming.locationnameprefix",
+    "pk": 48,
+    "fields": {
+      "text": "Kahlen"
+    }
+  },
+  {
+    "model": "naming.locationnameprefix",
+    "pk": 49,
+    "fields": {
+      "text": "Syn"
+    }
+  },
+  {
+    "model": "naming.locationnameprefix",
+    "pk": 50,
+    "fields": {
+      "text": "Falken"
+    }
+  },
+  {
+    "model": "naming.locationnameprefix",
+    "pk": 51,
+    "fields": {
+      "text": "Raben"
+    }
+  },
+  {
+    "model": "naming.locationnameprefix",
+    "pk": 52,
+    "fields": {
+      "text": "Zorn"
+    }
+  },
+  {
+    "model": "naming.locationnameprefix",
+    "pk": 53,
+    "fields": {
+      "text": "Greven"
     }
   },
   {
@@ -487,6 +613,160 @@
     "pk": 27,
     "fields": {
       "text": "den"
+    }
+  },
+  {
+    "model": "naming.locationnamepostfix",
+    "pk": 28,
+    "fields": {
+      "text": "itz"
+    }
+  },
+  {
+    "model": "naming.locationnamepostfix",
+    "pk": 29,
+    "fields": {
+      "text": "wald"
+    }
+  },
+  {
+    "model": "naming.locationnamepostfix",
+    "pk": 30,
+    "fields": {
+      "text": "walden"
+    }
+  },
+  {
+    "model": "naming.locationnamepostfix",
+    "pk": 31,
+    "fields": {
+      "text": "h\u00fctten"
+    }
+  },
+  {
+    "model": "naming.locationnamepostfix",
+    "pk": 32,
+    "fields": {
+      "text": "bergen"
+    }
+  },
+  {
+    "model": "naming.locationnamepostfix",
+    "pk": 33,
+    "fields": {
+      "text": "zinnen"
+    }
+  },
+  {
+    "model": "naming.locationnamepostfix",
+    "pk": 34,
+    "fields": {
+      "text": "rath"
+    }
+  },
+  {
+    "model": "naming.locationnamepostfix",
+    "pk": 35,
+    "fields": {
+      "text": "wies"
+    }
+  },
+  {
+    "model": "naming.locationnamepostfix",
+    "pk": 36,
+    "fields": {
+      "text": "berk"
+    }
+  },
+  {
+    "model": "naming.locationnamepostfix",
+    "pk": 37,
+    "fields": {
+      "text": "beck"
+    }
+  },
+  {
+    "model": "naming.locationnamepostfix",
+    "pk": 38,
+    "fields": {
+      "text": "stein"
+    }
+  },
+  {
+    "model": "naming.locationnamepostfix",
+    "pk": 39,
+    "fields": {
+      "text": "steyn"
+    }
+  },
+  {
+    "model": "naming.locationnamepostfix",
+    "pk": 40,
+    "fields": {
+      "text": "sten"
+    }
+  },
+  {
+    "model": "naming.locationnamepostfix",
+    "pk": 41,
+    "fields": {
+      "text": "holzen"
+    }
+  },
+  {
+    "model": "naming.locationnamepostfix",
+    "pk": 42,
+    "fields": {
+      "text": "au"
+    }
+  },
+  {
+    "model": "naming.locationnamepostfix",
+    "pk": 43,
+    "fields": {
+      "text": "grund"
+    }
+  },
+  {
+    "model": "naming.locationnamepostfix",
+    "pk": 44,
+    "fields": {
+      "text": "hut"
+    }
+  },
+  {
+    "model": "naming.locationnamepostfix",
+    "pk": 45,
+    "fields": {
+      "text": "winkel"
+    }
+  },
+  {
+    "model": "naming.locationnamepostfix",
+    "pk": 46,
+    "fields": {
+      "text": "lar"
+    }
+  },
+  {
+    "model": "naming.locationnamepostfix",
+    "pk": 47,
+    "fields": {
+      "text": "dorff"
+    }
+  },
+  {
+    "model": "naming.locationnamepostfix",
+    "pk": 48,
+    "fields": {
+      "text": "witz"
+    }
+  },
+  {
+    "model": "naming.locationnamepostfix",
+    "pk": 49,
+    "fields": {
+      "text": "hau"
     }
   }
 ]

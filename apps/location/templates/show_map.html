@@ -1,26 +1,22 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block css %}
-    <link rel="stylesheet" href="{% static 'css/map.css' %}">
-{% endblock %}
-
 {% block js %}
-    <script type="text/javascript" src="{% static 'js/map.js' %}"></script>
     <script type="text/javascript">
-    let mapData = [
-        {% for dot in canvas_map.map_dots.all %}
-            {{ dot.get_as_json|safe }},
-        {% endfor %}
-    ];
+        $(document).ready(function () {
+            $('#map').click(function (e) {
+                let offset = $(this).offset();
+                console.log(e.pageX - offset.left, e.pageY - offset.top);
+            });
+        });
     </script>
 {% endblock %}
 
 {% block content %}
     <div class="row">
         <div class="col s12">
-            Durp
-            <canvas id="map" width="{{ canvas_width }}" height="{{ canvas_height }}"></canvas>
+            Map #{{ canvas_map.id }}
+            <img id="map" alt="Map #{{ canvas_map.id }}" src="{{ canvas_map.political_map.url }}"/>
         </div>
     </div>
 {% endblock %}
