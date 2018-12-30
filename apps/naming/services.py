@@ -9,11 +9,13 @@ class PersonNameService(object):
 
     @staticmethod
     def get_name(gender):
+        # TODO order by ? is very inperformant!
         return PersonName.objects.filter(gender=gender).order_by('?').first()
 
 
 class LocationNameService(object):
     MAX_ITERATIONS = 10000
+    STRING_SIMILARITY_FACTOR = 0.5
 
     @staticmethod
     def create_name():
@@ -22,11 +24,12 @@ class LocationNameService(object):
         amount_postfixes = LocationNamePostfix.objects.count()
         name = ''
         iteration = 0
-        while len(name) == 0 or County.objects.filter(name=name).exists():
+        while len(name) == 0:
             iteration += 1
             if iteration > LocationNameService.MAX_ITERATIONS:
                 raise Exception('County-Namepool is empty. Add more names!')
-            while SequenceMatcher(None, prefix.text.lower(), postfix.text.lower()).ratio() > 0.2:
+            while SequenceMatcher(None, prefix.text.lower(), postfix.text.lower()).ratio() > \
+                    LocationNameService.STRING_SIMILARITY_FACTOR:
                 prefix = LocationNamePrefix.objects.all()[randrange(0, amount_prefixes)]
                 postfix = LocationNamePostfix.objects.all()[randrange(0, amount_postfixes)]
             name = f'{prefix}{postfix}'
