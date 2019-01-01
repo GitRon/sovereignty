@@ -22,6 +22,9 @@ class County(models.Model):
     def __str__(self):
         return self.name
 
+    def size(self):
+        return self.map_dots.count()
+
     def get_primary_color_as_rgb(self):
         return list(int(self.primary_color.lstrip('#')[i:i + 2], 16) for i in (0, 2, 4))
 
@@ -42,38 +45,45 @@ def calculate_target_size(sender, instance, **kwargs):
 
 
 class Map(models.Model):
+    DISPLAY_FACTOR = 4
+
+    dimension = models.PositiveIntegerField(default=0, help_text='Height/Width of the map')
     political_map = models.ImageField(upload_to=upload_location, null=True, blank=True)
 
     def __str__(self):
         return f'Map {self.id}'
 
     def is_fully_processed(self):
-        return not self.map_dots.filter(county__isnull=True).exists()
+        return not self.map_dots.filter(county__isnull=True).exclude(is_water=True).exists()
+
+    @property
+    def display_size(self):
+        return self.dimension * self.DISPLAY_FACTOR
 
 
 class MapDot(models.Model):
-    TERRAIN_WATER = 1
-    TERRAIN_LAND = 2
+    TERRAIN_FIELDS = 1
+    TERRAIN_PLAINS = 2
+    TERRAIN_SWAMP = 3
+    TERRAIN_STEPPE = 4
+    TERRAIN_WOODS = 5
+    TERRAIN_HILLS = 6
+    TERRAIN_MOUNTAINS = 7
     TERRAIN_CHOICES = (
-        (TERRAIN_WATER, 'Water'),
-        (TERRAIN_LAND, 'Land')
+        (TERRAIN_FIELDS, 'Fields'),
+        (TERRAIN_PLAINS, 'Plains'),
+        (TERRAIN_SWAMP, 'Swamp'),
+        (TERRAIN_STEPPE, 'Steppe'),
+        (TERRAIN_WOODS, 'Woods'),
+        (TERRAIN_HILLS, 'Hills'),
+        (TERRAIN_MOUNTAINS, 'Mountains'),
     )
-
-    # AREA_TYPE_FIELDS = 1
-    # AREA_TYPE_MOUNTAINS = 2
-    # AREA_TYPE_SWAMP = 3
-    # AREA_TYPE_WOODS = 4
-    # AREA_TYPE_CHOICES = (
-    #     (AREA_TYPE_FIELDS, 'Fields'),
-    #     (AREA_TYPE_MOUNTAINS, 'Montains'),
-    #     (AREA_TYPE_SWAMP, 'Swamp'),
-    #     (AREA_TYPE_WOODS, 'Woods')
-    # )
 
     map = models.ForeignKey(Map, related_name='map_dots', db_index=True, on_delete=models.CASCADE)
     county = models.ForeignKey(County, related_name='map_dots', null=True, blank=True, db_index=True,
                                on_delete=models.CASCADE)
-    terrain = models.PositiveIntegerField(choices=TERRAIN_CHOICES, default=TERRAIN_WATER, db_index=True)
+    is_water = models.BooleanField(default=True, db_index=True)
+    terrain = models.PositiveIntegerField(choices=TERRAIN_CHOICES, default=TERRAIN_FIELDS, db_index=True)
     is_border = models.BooleanField(default=False)
     is_capital = models.BooleanField(default=False)
     coordinate_x = models.IntegerField(db_index=True)
@@ -85,7 +95,7 @@ class MapDot(models.Model):
         return f'Map-Dot {self.coordinate_x}/{self.coordinate_y} (Map {self.map.id})'
 
     def get_color(self):
-        if self.terrain == MapDot.TERRAIN_WATER:
+        if self.is_water:
             color = [66, 134, 244]
         elif self.is_capital:
             color = [255, 255, 255]

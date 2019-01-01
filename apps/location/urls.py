@@ -1,8 +1,10 @@
+from django.urls import path
+
 from apps.location import views
-from django.conf.urls import url
 
 urlpatterns = [
 
-    url(r'^show-map$', views.ShowMapDashboard.as_view(), name='show-map-view'),
+    path('show-map', views.ShowMapDashboard.as_view(), name='show-map-view'),
+    path('map-dot-details/<int:map_id>/<int:x>/<int:y>', views.MapDotDetail.as_view(), name='map-dot-detail-ajax'),
 
 ]

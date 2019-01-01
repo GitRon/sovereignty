@@ -60,12 +60,14 @@ class MapService(object):
     Helper functions
     """
 
-    def get_unassigned_dot(self) -> MapDot:
-        return self.canvas_map.map_dots.filter(county__isnull=True).exclude(terrain=MapDot.TERRAIN_WATER) \
-            .get_random()
+    def get_unassigned_dot(self):
+        unassigned_dot = self.get_left_dots().get_random()
+        if not unassigned_dot:
+            return None
+        return unassigned_dot
 
     def get_left_dots(self):
-        return self.canvas_map.map_dots.filter(county__isnull=True)
+        return self.canvas_map.map_dots.filter(county__isnull=True).exclude(is_water=True)
 
     @staticmethod
     def set_capital(county, dot):
@@ -73,20 +75,28 @@ class MapService(object):
         dot.county = county
         dot.save()
 
-    def get_adjacent_dots(self, dot: MapDot):
-        return MapDot.objects.filter(map=self.canvas_map,
-                                     coordinate_x__range=[dot.coordinate_x - 1, dot.coordinate_x + 1],
-                                     coordinate_y__range=[dot.coordinate_y - 1, dot.coordinate_y + 1]) \
+    def get_adjacent_dots(self, dot: MapDot, exclude_water=True):
+        dot_list = MapDot.objects.filter(map=self.canvas_map,
+                                         coordinate_x__range=[dot.coordinate_x - 1, dot.coordinate_x + 1],
+                                         coordinate_y__range=[dot.coordinate_y - 1, dot.coordinate_y + 1]) \
             .exclude(id=dot.id)
+
+        if exclude_water:
+            dot_list = dot_list.filter(is_water=False)
+
+        return dot_list
 
     def initialize_map(self):
 
         target_dot_amount = self.get_map_size()
 
+        if self.CANVAS_WIDTH != self.CANVAS_HEIGHT:
+            raise Exception('Map dimensions do not match.')
+
         if self.canvas_map:
             return
 
-        self.canvas_map = Map.objects.create()
+        self.canvas_map = Map.objects.create(dimension=self.CANVAS_WIDTH)
         print(f'Created map {self.canvas_map.id}.')
 
         print(f'Start creating {target_dot_amount} map dots in database.')
@@ -160,7 +170,8 @@ class MapService(object):
 
         left_dots = list(left_dots)
 
-        print(f'Assigning {len(left_dots)} to neighboring counties.')
+        print(f'Assigning {len(left_dots)} leftover dots to neighboring counties.')
+        iterations = 0
 
         while len(left_dots):
             for dot in left_dots:
@@ -170,8 +181,9 @@ class MapService(object):
                     dot.save()
                     left_dots.remove(dot)
                     print(f'Leftover dot assigned. Still {len(left_dots)} dots to go.')
+                iterations += 1
 
-        print(f'{left_dot_amount} leftover dot(s) assigned to neighboring counties.')
+        print(f'{left_dot_amount} leftover dot(s) assigned to neighboring counties in {iterations} iterations.')
 
     def draw_main_island(self):
 
@@ -185,15 +197,15 @@ class MapService(object):
 
         # Set capital and create county
         self.set_capital(land_county, capital_dot)
-        self.extend_county_area(land_county, [capital_dot])
+        self.extend_county_area(land_county, [capital_dot], False)
 
         created_dots = self.canvas_map.map_dots.filter(county=land_county)
 
         # Log island size
         print(f'Main island created with a size of {created_dots.count()}/{self.get_map_size()}.')
 
-        # Remove dummy county and turn dots to terrain 'land'
-        created_dots.update(terrain=MapDot.TERRAIN_LAND, county=None, is_capital=False)
+        # Remove dummy county and turn dots to 'land'
+        created_dots.update(is_water=False, county=None, is_capital=False)
         land_county.delete()
 
     def draw_county(self):
@@ -215,6 +227,10 @@ class MapService(object):
                 for dot in self.get_adjacent_dots(capital_dot):
                     if dot.county is None:
                         free_surrounding_dots += 1
+
+            if free_surrounding_dots >= self.MIN_COUNTY_START_SPACE:
+                break
+
             current_iteration += 1
 
         # If not enough space was found, indicate that map is 'full'
@@ -229,13 +245,13 @@ class MapService(object):
 
         return county
 
-    def extend_county_area(self, county, dot_list):
+    def extend_county_area(self, county, dot_list, exclude_water=True):
         new_county_dots = []
         county_size = MapDot.objects.filter(map=self.canvas_map, county=county).count()
 
         # For each dot in the given list...
         for county_dot in dot_list:
-            adjacent_dots = self.get_adjacent_dots(county_dot)
+            adjacent_dots = self.get_adjacent_dots(county_dot, exclude_water)
             # For each adjacent dot...
             for dot in adjacent_dots:
                 # Determine if dot can become a new county dot...
@@ -249,7 +265,7 @@ class MapService(object):
                     new_county_dots.append(dot)
 
         if len(new_county_dots):
-            self.extend_county_area(county, new_county_dots)
+            self.extend_county_area(county, new_county_dots, exclude_water)
 
     def determine_random_county_size(self, county):
         return randrange(0, max(self.get_min_county_size(), county.target_size))
@@ -259,7 +275,7 @@ class MapService(object):
         data = numpy.zeros((self.CANVAS_WIDTH, self.CANVAS_HEIGHT, 3), dtype=numpy.uint8)
 
         for dot in self.canvas_map.map_dots.all():
-            data[dot.coordinate_x, dot.coordinate_y] = dot.get_color()
+            data[dot.coordinate_y, dot.coordinate_x] = dot.get_color()
 
         image = Image.fromarray(data)
 

@@ -1,0 +1,18 @@
+<table class="striped">
+    <tr>
+        <td width="25%">County</td>
+        <td>{{ map_dot.county.name|default_if_none:'-' }}</td>
+    </tr>
+    <tr>
+        <td>Terrain</td>
+        <td>{{ map_dot.get_terrain_display }}</td>
+    </tr>
+    <tr>
+        <td>Capital</td>
+        <td>{{ map_dot.is_capital|yesno:"Yes,No" }}</td>
+    </tr>
+    <tr>
+        <td>Water</td>
+        <td>{{ map_dot.is_water|yesno:"Yes,No" }}</td>
+    </tr>
+</table>

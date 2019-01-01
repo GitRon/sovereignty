@@ -36,22 +36,22 @@ class MapServiceTest(TestCase):
         self.assertEqual(MapDot.objects.count(), self.ms.CANVAS_WIDTH * self.ms.CANVAS_HEIGHT)
 
     def tet_created_main_island(self):
-        self.assertGreaterEqual(MapDot.objects.filter(terrain=MapDot.TERRAIN_LAND).count(), 1)
+        self.assertGreaterEqual(MapDot.objects.filter(is_water=False).count(), 1)
 
     def test_get_adjacent_dots_in_the_middle(self):
         dot = MapDot.objects.filter(coordinate_x=int(self.ms.CANVAS_WIDTH / 2),
                                     coordinate_y=int(self.ms.CANVAS_HEIGHT / 2)).first()
-        self.assertEquals(self.ms.get_adjacent_dots(dot).count(), 8)
+        self.assertEquals(self.ms.get_adjacent_dots(dot, False).count(), 8)
 
     def test_get_adjacent_dots_at_the_side(self):
         dot = MapDot.objects.filter(coordinate_x=int(self.ms.CANVAS_WIDTH / 2),
                                     coordinate_y=0).first()
-        self.assertEquals(self.ms.get_adjacent_dots(dot).count(), 5)
+        self.assertEquals(self.ms.get_adjacent_dots(dot, False).count(), 5)
 
     def test_get_adjacent_dots_in_the_corner(self):
         dot = MapDot.objects.filter(coordinate_x=self.ms.CANVAS_WIDTH - 1,
                                     coordinate_y=self.ms.CANVAS_WIDTH - 1).first()
-        self.assertEquals(self.ms.get_adjacent_dots(dot).count(), 3)
+        self.assertEquals(self.ms.get_adjacent_dots(dot, False).count(), 3)
 
     def test_get_unassigned_dot_regular(self):
         self.assertIsInstance(self.ms.get_unassigned_dot(), MapDot)
@@ -69,8 +69,6 @@ class MapServiceTest(TestCase):
     def test_assign_leftover_dots(self):
         county = self.cs.create_random_county()
         self.ms.canvas_map.map_dots.filter(coordinate_x=0).update(county=county)
-        self.assertEquals(self.ms.get_left_dots().count(),
-                          (self.TEST_CANVAS_HEIGHT * self.TEST_CANVAS_WIDTH) - self.TEST_CANVAS_WIDTH)
         self.ms.assign_leftover_dots()
         self.assertEquals(self.ms.get_left_dots().count(), 0)
 
@@ -99,7 +97,7 @@ class MapServiceTest(TestCase):
 
     def test_no_leftover_dots(self):
         self.ms.create_world()
-        self.assertEqual(self.ms.canvas_map.map_dots.filter(county__isnull=True).count(), 0)
+        self.assertEqual(self.ms.canvas_map.map_dots.filter(county__isnull=True, is_water=False).count(), 0)
 
     def test_single_capital_per_county(self):
         self.ms.populate_map_with_countries()
@@ -107,3 +105,6 @@ class MapServiceTest(TestCase):
             MapDot.objects.filter(map=self.ms.canvas_map, is_capital=True).annotate(
                 Count('id')).values('county').order_by().filter(
                 county__isnull=False, id__count=0).count(), 0)
+
+    def test_water_has_no_country(self):
+        self.assertEqual(MapDot.objects.filter(is_water=True, county__isnull=False).count(), 0)
