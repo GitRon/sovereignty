@@ -10,12 +10,31 @@
     <script type="text/javascript" src="{% static 'materialize-css/dist/js/materialize.js' %}"></script>
     {% block js %}{% endblock %}
     <link rel="stylesheet" href="{% static 'materialize-css/dist/css/materialize.css' %}">
+    <link rel="stylesheet" href="{% static 'css/custom-materialize.css' %}">
     {% block css %}{% endblock %}
     <!-- Mobile Specific Metas -->
     <meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=0.5">
 </head>
 <body>
+<!-- Navigation -->
+<nav>
+    <div class="nav-wrapper">
+        <div class="row">
+            <div class="col s12">
+                <a href="#" class="brand-logo">Sovereignty</a>
+                <ul id="nav-mobile" class="right hide-on-med-and-down">
+                    <li class="active"><a href="{% url 'location:show-map-view' %}">Map</a></li>
+                    <li><a href="#">Dynasty</a></li>
+                    <li><a href="#">Country</a></li>
+                    <li><a href="#">Foreign Affairs</a></li>
+                    <li><a href="#">Menu</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
 <div class="container">
+
     <!-- Page Content goes here -->
     {% block content %}{% endblock %}
 </div>

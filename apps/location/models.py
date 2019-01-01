@@ -83,7 +83,7 @@ class MapDot(models.Model):
     county = models.ForeignKey(County, related_name='map_dots', null=True, blank=True, db_index=True,
                                on_delete=models.CASCADE)
     is_water = models.BooleanField(default=True, db_index=True)
-    terrain = models.PositiveIntegerField(choices=TERRAIN_CHOICES, default=TERRAIN_FIELDS, db_index=True)
+    terrain = models.PositiveIntegerField(choices=TERRAIN_CHOICES, null=True, blank=True, db_index=True)
     is_border = models.BooleanField(default=False)
     is_capital = models.BooleanField(default=False)
     coordinate_x = models.IntegerField(db_index=True)

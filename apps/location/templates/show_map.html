@@ -1,6 +1,15 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block css %}
+    <style>
+        #map-container {
+            width: {{ canvas_map.display_size|add:48 }}px;
+            height: {{ canvas_map.display_size|add:48 }}px;
+        }
+    </style>
+{% endblock %}
+
 {% block js %}
     <script type="text/javascript">
         $(document).ready(function () {
@@ -22,12 +31,20 @@
 
 {% block content %}
     <div class="row">
-        <div class="col s6">
-            Map #{{ canvas_map.id }}
-            <img id="map" width="{{ canvas_map.display_size }}"
-                 height="{{ canvas_map.display_size }}" alt="Map #{{ canvas_map.id }}"
-                 src="{{ canvas_map.political_map.url }}"/>
+        <div class="col s12">
+            <h1>Map #{{ canvas_map.id }}</h1>
         </div>
+    </div>
+
+    <div class="row">
+        <div class="col s3">
+            <div id="map-container" class="card-panel grey lighten-2 z-depth-1">
+                <img id="map" width="{{ canvas_map.display_size }}"
+                     height="{{ canvas_map.display_size }}" alt="Map #{{ canvas_map.id }}"
+                     src="{{ canvas_map.political_map.url }}"/>
+            </div>
+        </div>
+        <div class="col s3"></div>
         <div id="map-detail" class="col s6">
             Click on Map for province details
         </div>

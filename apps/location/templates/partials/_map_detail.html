@@ -1,11 +1,10 @@
 <table class="striped">
     <tr>
-        <td width="25%">County</td>
-        <td>{{ map_dot.county.name|default_if_none:'-' }}</td>
+        <th colspan="2">Province details</th>
     </tr>
     <tr>
         <td>Terrain</td>
-        <td>{{ map_dot.get_terrain_display }}</td>
+        <td>{{ map_dot.get_terrain_display|default_if_none:'-' }}</td>
     </tr>
     <tr>
         <td>Capital</td>
@@ -15,4 +14,17 @@
         <td>Water</td>
         <td>{{ map_dot.is_water|yesno:"Yes,No" }}</td>
     </tr>
+    {% if map_dot.county %}
+        <tr>
+            <th colspan="2">County details</th>
+        </tr>
+        <tr>
+            <td width="25%">County</td>
+            <td>{{ map_dot.county.name }}</td>
+        </tr>
+        <tr>
+            <td>Size</td>
+            <td>{{ map_dot.county.map_dots.count }} provinces</td>
+        </tr>
+    {% endif %}
 </table>
