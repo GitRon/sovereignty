@@ -1,11 +1,12 @@
 import os
 
-from PIL.Image import Image
 from django.db.models import Count
 from django.test import TestCase
 
+from apps.account.models import Savegame
 from apps.location.models import MapDot, Map
-from apps.location.services import MapService, CountyService
+from apps.location.services.country import CreateCountyService
+from apps.location.services.map import MapService
 
 
 class MapServiceTest(TestCase):
@@ -25,8 +26,8 @@ class MapServiceTest(TestCase):
         # Create main island
         cls.ms.draw_main_island()
 
-        # Additional services
-        cls.cs = CountyService()
+        # Additional services and objects
+        cls.cs = CreateCountyService()
 
     def setUp(self):
         pass
@@ -57,17 +58,17 @@ class MapServiceTest(TestCase):
         self.assertIsInstance(self.ms.get_unassigned_dot(), MapDot)
 
     def test_get_unassigned_dot_with_water(self):
-        county = self.cs.create_random_county()
+        county = self.cs.create_random_county(self.ms.canvas_map.savegame)
         self.ms.canvas_map.map_dots.update(county=county)
         self.assertEqual(self.ms.get_unassigned_dot(), None)
 
     def test_get_unassigned_dot_all_gone(self):
-        county = self.cs.create_random_county()
+        county = self.cs.create_random_county(self.ms.canvas_map.savegame)
         MapDot.objects.filter(map=self.ms.canvas_map).update(county=county)
         self.assertEquals(self.ms.get_unassigned_dot(), None)
 
     def test_assign_leftover_dots(self):
-        county = self.cs.create_random_county()
+        county = self.cs.create_random_county(self.ms.canvas_map.savegame)
         self.ms.canvas_map.map_dots.filter(coordinate_x=0).update(county=county)
         self.ms.assign_leftover_dots()
         self.assertEquals(self.ms.get_left_dots().count(), 0)

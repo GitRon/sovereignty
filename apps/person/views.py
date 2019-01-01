@@ -1,6 +1,6 @@
 from django.views import generic
 
-from apps.location.services import CountyService
+from apps.location.services.country import CreateCountyService
 from apps.naming.services import LocationNameService
 from apps.person.services import PersonService
 from apps.person.settings import GENDER_MALE
@@ -13,5 +13,5 @@ class PersonDashboard(generic.TemplateView):
         context = super().get_context_data(**kwargs)
         context['name'] = LocationNameService.create_name()
         context['person'] = PersonService.create_random_person(65, GENDER_MALE)
-        context['county'] = CountyService.create_random_county()
+        context['county'] = CreateCountyService.create_random_county()
         return context

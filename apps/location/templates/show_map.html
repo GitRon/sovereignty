@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load utils %}
 
 {% block css %}
     <style>
@@ -46,7 +47,48 @@
         </div>
         <div class="col s3"></div>
         <div id="map-detail" class="col s6">
-            Click on Map for province details
+            {% include 'partials/_map_detail.html' with map_dot=first_dot %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col s6">
+            <table class="striped">
+                <tr>
+                    <th>Name</th>
+                    <th>Provinces</th>
+                    <th>Color</th>
+                </tr>
+                {% for county in county_list %}
+                    <tr>
+                        <td>{{ county.county__name }}</td>
+                        <td>{{ county.province_count }}</td>
+                        <td>
+                            <div class="color-preview"
+                                 style="background-color: {{ county.county__primary_color }}"></div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class="col s6">
+            <table class="striped">
+                <tr>
+                    <th colspan="2">Statistics</th>
+                </tr>
+                <tr>
+                    <td>Size</td>
+                    <td>{{ canvas_map.dimension }} x {{ canvas_map.dimension }}</td>
+                </tr>
+                <tr>
+                    <td>Landmass</td>
+                    <td>{{ landmass|multiply:100|floatformat:2 }}%</td>
+                </tr>
+                <tr>
+                    <td>Number of counties</td>
+                    <td>{{ quantity_counties }}</td>
+                </tr>
+            </table>
         </div>
     </div>
 {% endblock %}

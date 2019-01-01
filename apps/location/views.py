@@ -1,11 +1,22 @@
+from django.contrib import messages
+from django.db.models import Count
+from django.shortcuts import redirect
 from django.views import generic
 
-from apps.location.models import Map, MapDot
-from apps.location.services import MapService
+from apps.location.models import Map, MapDot, County
+from apps.location.services.map import MapService
 
 
 class ShowMapDashboard(generic.TemplateView):
     template_name = 'show_map.html'
+    canvas_map = None
+
+    def dispatch(self, request, *args, **kwargs):
+        self.canvas_map = Map.objects.filter(savegame=self.request.session['savegame_id']).first()
+        if not self.canvas_map:
+            messages.add_message(self.request, messages.SUCCESS, 'Current savegame does not have a map yet.')
+            return redirect('account:menu-view')
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         ms = MapService()
@@ -15,13 +26,23 @@ class ShowMapDashboard(generic.TemplateView):
         context['canvas_height'] = ms.CANVAS_HEIGHT
         context['canvas_width'] = ms.CANVAS_WIDTH
 
-        canvas_map = Map.objects.order_by('-id').first()
-        if not canvas_map:
-            raise Exception('Requested map is not in database.')
-        if not canvas_map.is_fully_processed():
+        if not self.canvas_map.is_fully_processed():
             raise Exception('Map is not fully processed.')
 
-        context['canvas_map'] = canvas_map
+        context['county_list'] = MapDot.objects.filter(map=self.canvas_map, is_water=False)\
+            .values('county__name', 'county__primary_color') \
+            .annotate(province_count=Count('id')).order_by('-province_count')
+
+        # Stats
+        context['landmass'] = \
+            MapDot.objects.filter(map=self.canvas_map, is_water=False).count() / \
+            MapDot.objects.filter(map=self.canvas_map).count()
+
+        context['quantity_counties'] = County.objects.filter(savegame=self.canvas_map.savegame).count()
+
+        context['first_dot'] = MapDot.objects.filter(map=self.canvas_map, coordinate_x=0, coordinate_y=0).first()
+
+        context['canvas_map'] = self.canvas_map
 
         return context
 

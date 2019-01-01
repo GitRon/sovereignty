@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from apps.location.services import MapService
+from apps.location.services.map import MapService
 
 
 class Command(BaseCommand):

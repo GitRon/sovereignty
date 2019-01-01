@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 
+from apps.account.models import Savegame
 from apps.location.managers import MapDotManager
 
 
@@ -15,6 +16,7 @@ class County(models.Model):
     name = models.CharField(max_length=50)
     primary_color = models.CharField(max_length=10, null=True, blank=True)
     target_size = models.PositiveIntegerField(default=0)
+    savegame = models.ForeignKey(Savegame, related_name='counties', on_delete=models.CASCADE)
 
     class Meta:
         verbose_name_plural = 'Counties'
@@ -38,7 +40,7 @@ def set_primary_color(sender, instance, **kwargs):
 @receiver(pre_save, sender=County, dispatch_uid="county.calculate_target_size")
 def calculate_target_size(sender, instance, **kwargs):
     if not instance.target_size:
-        from apps.location.services import MapService
+        from apps.location.services.map import MapService
         ms = MapService()
         while instance.target_size < MapService.MIN_COUNTY_START_SPACE:
             instance.target_size = ms.calculate_county_target_size()
@@ -49,12 +51,13 @@ class Map(models.Model):
 
     dimension = models.PositiveIntegerField(default=0, help_text='Height/Width of the map')
     political_map = models.ImageField(upload_to=upload_location, null=True, blank=True)
+    savegame = models.OneToOneField(Savegame, related_name='map', on_delete=models.CASCADE)
 
     def __str__(self):
         return f'Map {self.id}'
 
     def is_fully_processed(self):
-        return not self.map_dots.filter(county__isnull=True).exclude(is_water=True).exists()
+        return not self.map_dots.filter(county__isnull=True).exclude(is_water=True).exists() and self.political_map.name
 
     @property
     def display_size(self):

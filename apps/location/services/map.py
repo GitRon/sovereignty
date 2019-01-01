@@ -8,19 +8,10 @@ import numpy
 from PIL import Image
 from django.conf import settings
 
+from apps.account.models import Savegame
 from apps.location.models import County, Map, MapDot
+from apps.location.services.country import CreateCountyService
 from apps.naming.services import LocationNameService
-
-
-class CountyService(object):
-
-    @staticmethod
-    def create_random_county():
-        person = County.objects.create(
-            name=LocationNameService.create_name(),
-        )
-
-        return person
 
 
 class MapService(object):
@@ -37,6 +28,7 @@ class MapService(object):
     created_countries = 0
     canvas_map = None
     start_time = None
+    savegame = None
 
     """
     Base constant calculators
@@ -96,7 +88,11 @@ class MapService(object):
         if self.canvas_map:
             return
 
-        self.canvas_map = Map.objects.create(dimension=self.CANVAS_WIDTH)
+        # Create savegame
+        self.savegame = Savegame.objects.create()
+
+        # Create map object
+        self.canvas_map = Map.objects.create(dimension=self.CANVAS_WIDTH, savegame=self.savegame)
         print(f'Created map {self.canvas_map.id}.')
 
         print(f'Start creating {target_dot_amount} map dots in database.')
@@ -188,7 +184,7 @@ class MapService(object):
     def draw_main_island(self):
 
         # Create dummy county for landmass
-        land_county = County.objects.create(name='Main island')
+        land_county = County.objects.create(name='Main island', savegame=self.savegame)
         # Needs to be after the creation to override the pre-save-signal
         land_county.target_size = int(self.get_map_size() * self.LAND_WATER_RATIO)
 
@@ -209,10 +205,10 @@ class MapService(object):
         land_county.delete()
 
     def draw_county(self):
-        county = CountyService.create_random_county()
+        county = CreateCountyService.create_random_county(self.savegame)
         while County.objects.filter(map_dots__map=self.canvas_map, name=county.name).count() > 1:
             # todo make this more fancy
-            county.name = LocationNameService.create_name()
+            county.name = LocationNameService.create_name(self.savegame)
             county.save()
 
         # Check if there is enough 'space' around the chosen capital dot
@@ -275,6 +271,7 @@ class MapService(object):
         data = numpy.zeros((self.CANVAS_WIDTH, self.CANVAS_HEIGHT, 3), dtype=numpy.uint8)
 
         for dot in self.canvas_map.map_dots.all():
+            # Attention: For some reason are x and y coordinates switched! Keep this way to create correct map!
             data[dot.coordinate_y, dot.coordinate_x] = dot.get_color()
 
         image = Image.fromarray(data)

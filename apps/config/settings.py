@@ -64,7 +64,9 @@ INSTALLED_APPS = [
     # Third party
 
     # Local
+    'apps.account',
     'apps.config',
+    'apps.core',
     'apps.location',
     'apps.naming',
     'apps.person',
@@ -93,6 +95,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'apps.core.context_processors.current_savegame',
             ],
         },
     },

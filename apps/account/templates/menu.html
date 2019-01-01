@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block js %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.card.cursor-pointer').click(function () {
+                window.location.href = '/menu/load/savegame/' + $(this).attr('data-id');
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col s12">
+            <h1>Menu</h1>
+        </div>
+    </div>
+
+
+    <div class="row">
+        {% for savegame in savegame_list %}
+            <div class="col s12 m6">
+                <div class="card {% if savegame.map.is_fully_processed %}hoverable green darken-1 cursor-pointer{% else %}red darken-4{% endif %}"
+                     data-id="{{ savegame.id }}">
+                    <div class="card-content white-text">
+                        <span class="card-title">{{ savegame }}
+                            <span class="badge">Size {{ savegame.map.dimension }}</span> </span>
+                        {% if savegame.map.is_fully_processed %}
+                            <p>Click here to load this savegame.</p>
+                        {% else %}
+                            <p>Map is not finished - cannot load savegame.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}
