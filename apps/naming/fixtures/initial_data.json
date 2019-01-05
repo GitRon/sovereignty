@@ -427,6 +427,27 @@
     }
   },
   {
+    "model": "naming.locationnameprefix",
+    "pk": 54,
+    "fields": {
+      "text": "Breiten"
+    }
+  },
+  {
+    "model": "naming.locationnameprefix",
+    "pk": 55,
+    "fields": {
+      "text": "Drachen"
+    }
+  },
+  {
+    "model": "naming.locationnameprefix",
+    "pk": 56,
+    "fields": {
+      "text": "Offen"
+    }
+  },
+  {
     "model": "naming.locationnamepostfix",
     "pk": 1,
     "fields": {
@@ -767,6 +788,20 @@
     "pk": 49,
     "fields": {
       "text": "hau"
+    }
+  },
+  {
+    "model": "naming.locationnamepostfix",
+    "pk": 50,
+    "fields": {
+      "text": "stett"
+    }
+  },
+  {
+    "model": "naming.locationnamepostfix",
+    "pk": 51,
+    "fields": {
+      "text": "rode"
     }
   }
 ]

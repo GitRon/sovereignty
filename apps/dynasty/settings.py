@@ -4,3 +4,5 @@ GENDER_CHOICES = (
     (GENDER_MALE, 'male'),
     (GENDER_FEMALE, 'female')
 )
+
+MAX_SKILL_POINTS = 100

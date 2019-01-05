@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="row">
+        <div class="col s12">
+            <h1>{{ object }}</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12">
+            <table class="striped">
+                <tr>
+                    <td>Name</td>
+                    <td>{{ object.name }}</td>
+                </tr>
+                <tr>
+                    <td>Location</td>
+                    <td>{{ object.from_location }}</td>
+                </tr>
+                <tr>
+                    <td>Gender</td>
+                    <td>{{ object.get_gender_display }} <i class="fas fa-venus"></i>  {# todo dynamic icon #}</td>
+                </tr>
+                <tr>
+                    <td>Father</td>
+                    <td>{{ object.father }}</td>
+                </tr>
+                <tr>
+                    <td>Mother</td>
+                    <td>{{ object.mother }}</td>
+                </tr>
+                <tr>
+                    <td>Leadership</td>
+                    <td>{{ object.leadership }}</td>
+                </tr>
+                <tr>
+                    <td>Intelligence</td>
+                    <td>{{ object.intelligence }}</td>
+                </tr>
+                <tr>
+                    <td>Charisma</td>
+                    <td>{{ object.charisma }}</td>
+                </tr>
+                <tr>
+                    <td>Fama</td>
+                    <td>{{ object.fama }}</td>
+                </tr>
+                <tr>
+                    <td>Traits</td>
+                    <td>
+                        {% for trait in object.traits.all %}
+                            <div>{{ trait }}</div>
+                        {% endfor %}
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+{% endblock %}

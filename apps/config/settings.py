@@ -67,9 +67,9 @@ INSTALLED_APPS = [
     'apps.account',
     'apps.config',
     'apps.core',
+    'apps.dynasty',
     'apps.location',
     'apps.naming',
-    'apps.person',
 ]
 
 MIDDLEWARE = [

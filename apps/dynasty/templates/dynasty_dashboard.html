@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="row">
+{#  todo add breadcrumbs  #}
+        <div class="col s12">
+            <h1>My dynasty</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12">
+            <table class="striped">
+                <tr>
+                    <td>Ruler</td>
+                    <td><a href="{% url 'dynasty:person-detail-view' ruler.id %}">{{ ruler }}</a></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+{% endblock %}

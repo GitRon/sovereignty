@@ -8,6 +8,6 @@ urlpatterns = [
     # Custom routes
     path('', include(('apps.account.urls', 'account'), namespace='account')),
     path('location/', include(('apps.location.urls', 'location'), namespace='location')),
-    path('person/', include(('apps.person.urls', 'person'), namespace='person')),
+    path('dynasty/', include(('apps.dynasty.urls', 'dynasty'), namespace='dynasty')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
   + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,6 +1,6 @@
 from django.db import models
 
-import apps.person.settings as ps
+import apps.dynasty.settings as ps
 
 
 class PersonName(models.Model):
