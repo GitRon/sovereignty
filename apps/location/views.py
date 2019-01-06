@@ -3,6 +3,7 @@ from django.db.models import Count
 from django.shortcuts import redirect
 from django.views import generic
 
+from apps.account.managers import SavegameManager
 from apps.location.models import Map, MapDot, County
 from apps.location.services.map import MapService
 
@@ -12,7 +13,7 @@ class ShowMapDashboard(generic.TemplateView):
     canvas_map = None
 
     def dispatch(self, request, *args, **kwargs):
-        self.canvas_map = Map.objects.filter(savegame=self.request.session['savegame_id']).first()
+        self.canvas_map = Map.objects.filter(savegame=SavegameManager.get_from_session(self.request)).first()
         if not self.canvas_map:
             messages.add_message(self.request, messages.SUCCESS, 'Current savegame does not have a map yet.')
             return redirect('account:menu-view')

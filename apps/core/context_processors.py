@@ -1,8 +1,7 @@
-from apps.account.models import Savegame
+from apps.account.managers import SavegameManager
 
 
 def current_savegame(request):
-    savegame_id = request.session['savegame_id']
     return {
-        'savegame_id': savegame_id
+        'savegame_id': SavegameManager.get_from_session(request)
     }

@@ -2,15 +2,13 @@ from random import randint
 
 from django.db import models
 
-
-class MapDotQuerySet(models.QuerySet):
-    def get_random(self):
-        count = self.count()
-        if count > 0:
-            return self[randint(0, count - 1)]
-        return self
+from apps.account.managers import SavegameBasedObjectManager
+from apps.core.managers import RandomManager
 
 
-class MapDotManager(models.Manager):
-    def get_queryset(self):
-        return MapDotQuerySet(self.model, using=self._db)  # Important!
+class CountyManager(SavegameBasedObjectManager):
+    pass
+
+
+class MapDotManager(RandomManager):
+    pass

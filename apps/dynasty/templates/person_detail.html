@@ -15,19 +15,29 @@
                 </tr>
                 <tr>
                     <td>Location</td>
-                    <td>{{ object.from_location }}</td>
+                    <td>{{ object.dynasty.from_location }}</td>
                 </tr>
                 <tr>
                     <td>Gender</td>
-                    <td>{{ object.get_gender_display }} <i class="fas fa-venus"></i>  {# todo dynamic icon #}</td>
+                    <td>
+                        {% include 'partials/_gender_icon.html' with person=object gender_male=gender_male %}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Age</td>
+                    <td>
+                        *{{ object.birth_year }}
+                        {% if object.death_year %}- &dagger; {{ object.death_year }} {% endif %}
+                        ({{ person.age }} years)
+                    </td>
                 </tr>
                 <tr>
                     <td>Father</td>
-                    <td>{{ object.father }}</td>
+                    <td>{{ object.father|default_if_none:"unknown" }}</td>
                 </tr>
                 <tr>
                     <td>Mother</td>
-                    <td>{{ object.mother }}</td>
+                    <td>{{ object.mother|default_if_none:"unknown" }}</td>
                 </tr>
                 <tr>
                     <td>Leadership</td>

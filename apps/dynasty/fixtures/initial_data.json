@@ -1,0 +1,74 @@
+[
+  {
+    "model": "dynasty.trait",
+    "pk": 1,
+    "fields": {
+      "type": 1,
+      "incompatible_traits": []
+    }
+  },
+  {
+    "model": "dynasty.trait",
+    "pk": 2,
+    "fields": {
+      "type": 3,
+      "incompatible_traits": []
+    }
+  },
+  {
+    "model": "dynasty.trait",
+    "pk": 3,
+    "fields": {
+      "type": 6,
+      "incompatible_traits": []
+    }
+  },
+  {
+    "model": "dynasty.trait",
+    "pk": 4,
+    "fields": {
+      "type": 2,
+      "incompatible_traits": [
+        8
+      ]
+    }
+  },
+  {
+    "model": "dynasty.trait",
+    "pk": 5,
+    "fields": {
+      "type": 5,
+      "incompatible_traits": [
+        6
+      ]
+    }
+  },
+  {
+    "model": "dynasty.trait",
+    "pk": 6,
+    "fields": {
+      "type": 4,
+      "incompatible_traits": [
+        5
+      ]
+    }
+  },
+  {
+    "model": "dynasty.trait",
+    "pk": 7,
+    "fields": {
+      "type": 7,
+      "incompatible_traits": []
+    }
+  },
+  {
+    "model": "dynasty.trait",
+    "pk": 8,
+    "fields": {
+      "type": 8,
+      "incompatible_traits": [
+        4
+      ]
+    }
+  }
+]

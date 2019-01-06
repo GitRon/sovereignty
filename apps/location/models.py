@@ -4,8 +4,7 @@ from django.db import models
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 
-from apps.account.models import Savegame
-from apps.location.managers import MapDotManager
+from apps.location.managers import MapDotManager, CountyManager
 
 
 def upload_location(instance, filename):
@@ -13,10 +12,14 @@ def upload_location(instance, filename):
 
 
 class County(models.Model):
-    name = models.CharField(max_length=50)
+    NAME_LENGTH = 50
+
+    name = models.CharField(max_length=NAME_LENGTH)
     primary_color = models.CharField(max_length=10, null=True, blank=True)
     target_size = models.PositiveIntegerField(default=0)
-    savegame = models.ForeignKey(Savegame, related_name='counties', on_delete=models.CASCADE)
+    savegame = models.ForeignKey('account.Savegame', related_name='counties', on_delete=models.CASCADE)
+
+    objects = CountyManager()
 
     class Meta:
         verbose_name_plural = 'Counties'
@@ -51,7 +54,7 @@ class Map(models.Model):
 
     dimension = models.PositiveIntegerField(default=0, help_text='Height/Width of the map')
     political_map = models.ImageField(upload_to=upload_location, null=True, blank=True)
-    savegame = models.OneToOneField(Savegame, related_name='map', on_delete=models.CASCADE)
+    savegame = models.OneToOneField('account.Savegame', related_name='map', on_delete=models.CASCADE)
 
     def __str__(self):
         return f'Map {self.id}'

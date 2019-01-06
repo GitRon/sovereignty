@@ -1,8 +1,7 @@
 from django.db import models
 
 import apps.dynasty.settings as ps
-from apps.account.models import Savegame
-from apps.dynasty.managers import TraitManager
+from apps.dynasty.managers import TraitManager, PersonManager, DynastyManager
 from apps.location.models import County
 
 
@@ -13,6 +12,8 @@ class Trait(models.Model):
     TRAIT_TINY = 4
     TRAIT_GIANT = 5
     TRAIT_STRATEGIST = 6
+    TRAIT_RELIGIOUS_ZEAL = 7
+    TRAIT_BENEVOLENT = 8
     TRAIT_CHOICES = (
         (TRAIT_ALCOHOLIC, "Alcoholic"),
         (TRAIT_CRUEL, "Cruel"),
@@ -20,9 +21,12 @@ class Trait(models.Model):
         (TRAIT_TINY, "Tiny"),
         (TRAIT_GIANT, "Giant"),
         (TRAIT_STRATEGIST, "Strategist"),
+        (TRAIT_RELIGIOUS_ZEAL, "Religious Zeal"),
+        (TRAIT_BENEVOLENT, "Benevolent"),
     )
 
     type = models.PositiveSmallIntegerField(choices=TRAIT_CHOICES)
+    incompatible_traits = models.ManyToManyField('self')
 
     objects = TraitManager()
 
@@ -31,24 +35,35 @@ class Trait(models.Model):
 
 
 class Dynasty(models.Model):
-    # todo was sind dynastien genau? wie löse ich das?
-    # todo county braucht feld "ruling_dynasty"
-    pass
+    from_location = models.CharField(max_length=County.NAME_LENGTH)
+    ruling_over = models.ForeignKey(County, related_name='natives', null=True, blank=True, on_delete=models.CASCADE)
+    current_dynast = models.ForeignKey("Person", related_name='rules_over', null=True, blank=True,
+                                       on_delete=models.CASCADE)
+    # System attributes
+    savegame = models.ForeignKey('account.Savegame', related_name='dynasties', on_delete=models.CASCADE)
+
+    objects = DynastyManager()
+
+    def __str__(self):
+        return f'Dynasty of {self.from_location}'
 
 
 class Person(models.Model):
     name = models.CharField(max_length=50)
     nobility = models.BooleanField(default=True)
-    from_location = models.ForeignKey(County, related_name='natives', on_delete=models.CASCADE)
     gender = models.PositiveSmallIntegerField(choices=ps.GENDER_CHOICES)
     birth_year = models.PositiveIntegerField()
+    death_year = models.PositiveIntegerField(null=True, blank=True)
+    dynasty = models.ForeignKey(Dynasty, related_name='persons', on_delete=models.CASCADE)
 
     # System attributes
-    savegame = models.ForeignKey(Savegame, related_name='persons', on_delete=models.CASCADE)
+    savegame = models.ForeignKey('account.Savegame', related_name='persons', on_delete=models.CASCADE)
 
     # Relationship
-    father = models.ManyToManyField("Person", related_name='fathers_children')
-    mother = models.ManyToManyField("Person", related_name='mothers_children')
+    father = models.ForeignKey("Person", related_name='fathers_children', null=True, blank=True,
+                               on_delete=models.CASCADE)
+    mother = models.ForeignKey("Person", related_name='mothers_children', null=True, blank=True,
+                               on_delete=models.CASCADE)
 
     # Skills (scale from 0 - 100)
     leadership = models.PositiveIntegerField(default=50)
@@ -61,5 +76,13 @@ class Person(models.Model):
     # Traits
     traits = models.ManyToManyField(Trait)
 
+    objects = PersonManager()
+
     def __str__(self):
-        return f'{self.name} von {self.from_location}'
+        return f'{self.name} von {self.dynasty.from_location}'
+
+    @property
+    def age(self):
+        if not self.death_year:
+            return self.savegame.current_year - self.birth_year
+        return self.death_year - self.birth_year

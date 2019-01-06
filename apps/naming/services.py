@@ -10,8 +10,7 @@ class PersonNameService(object):
 
     @staticmethod
     def get_name(gender):
-        # TODO order by ? is very inperformant!
-        return PersonName.objects.filter(gender=gender).order_by('?').first()
+        return PersonName.objects.filter(gender=gender).get_random()
 
 
 class LocationNameService(object):

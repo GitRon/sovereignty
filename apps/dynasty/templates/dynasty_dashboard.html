@@ -2,7 +2,7 @@
 
 {% block content %}
     <div class="row">
-{#  todo add breadcrumbs  #}
+        {#  todo add breadcrumbs  #}
         <div class="col s12">
             <h1>My dynasty</h1>
         </div>
@@ -10,10 +10,19 @@
     <div class="row">
         <div class="col s12">
             <table class="striped">
-                <tr>
-                    <td>Ruler</td>
-                    <td><a href="{% url 'dynasty:person-detail-view' ruler.id %}">{{ ruler }}</a></td>
-                </tr>
+                {% for person in person_list %}
+                    <tr>
+                        <td><a href="{% url 'dynasty:person-detail-view' person.id %}">{{ person }}</a></td>
+                        <td>
+                            {% if person == person.dynasty.current_dynast %}
+                                <i class="fas fa-crown" title="Current dynast"></i>
+                            {% endif %}
+                        </td>
+                        <td>{% include 'partials/_gender_icon.html' with person=person gender_male=gender_male %}</td>
+                        <td>AD {{ person.birth_year }}</td>
+                        <td>{{ person.age }} years</td>
+                    </tr>
+                {% endfor %}
             </table>
         </div>
     </div>

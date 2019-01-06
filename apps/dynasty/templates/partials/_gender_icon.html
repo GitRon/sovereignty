@@ -1,0 +1,5 @@
+{% if person.gender == gender_male %}
+    <i class="fas fa-mars" title="{{ person.get_gender_display }}"></i>
+{% else %}
+    <i class="fas fa-venus"></i>
+{% endif %}
