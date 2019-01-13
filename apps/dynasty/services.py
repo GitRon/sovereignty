@@ -1,7 +1,9 @@
 import random
 
 from apps.account.managers import SavegameManager
+from apps.core.utils import get_rand_bool
 from apps.location.models import County
+from apps.naming.models import PersonName
 from apps.naming.services import PersonNameService
 from apps.dynasty.models import Person, Trait, Dynasty
 
@@ -12,6 +14,8 @@ class PersonService(object):
     DEFAULT_TRAIT_QUANTITY = 0.5
     TRAIT_QUANTITY_SIGMA = 0.5
     MAX_STARTING_TRAITS = 3
+
+    pns = PersonNameService()
 
     def get_trait_set(self):
         """
@@ -32,8 +36,23 @@ class PersonService(object):
         return trait_list
 
     def create_random_person(self, savegame, birth_year, gender, dynasty, father=None, mother=None):
+
+        # Get name of other children to avoid duplicate naming
+        if father:
+            name_exclude_list = father.get_children_names()
+        elif mother:
+            name_exclude_list = mother.get_children_names()
+        else:
+            name_exclude_list = []
+
+        # Get first name and optional middle name
+        first_name = self.pns.get_name(gender, name_exclude_list)
+        name_exclude_list.append(first_name)
+        middle_name = self.pns.get_name(gender, name_exclude_list)
+
         person = Person.objects.create(
-            name=PersonNameService.get_name(gender),
+            first_name=first_name,
+            middle_name=middle_name,
             nobility=True,
             dynasty=dynasty,
             gender=gender,
@@ -75,6 +94,9 @@ class DynastyService(object):
     def __init__(self, savegame) -> None:
         self.savegame = savegame
 
+    def _get_year_from_age(self, age):
+        return self.savegame.current_year - age
+
     def get_parenting_age(self, gender):
         """
         Get age when a person got his first child
@@ -91,8 +113,11 @@ class DynastyService(object):
         return round(max(random.gauss(self.AVG_QUANTITY_CHILDREN, self.AVG_QUANTITY_CHILDREN_SIGMA), 0))
 
     def get_wife_birth_year_based_on_husband_age(self, age_husband):
-        year = round(max(age_husband + random.gauss(self.MOTHER_AGE_OFFSET_TO_HUSBAND, self.MOTHER_AGE_OFFSET_TO_SIGMA),
-                         self.MIN_PARENTING_AGE_FEMALE))
+        year = self._get_year_from_age(round(max(
+            age_husband + random.gauss(
+                self.MOTHER_AGE_OFFSET_TO_HUSBAND,
+                self.MOTHER_AGE_OFFSET_TO_SIGMA),
+            self.MIN_PARENTING_AGE_FEMALE)))
         print(f'Wife birth year {year}')
         return year
 
@@ -110,7 +135,7 @@ class DynastyService(object):
         else:
             age_oldest_ruler_child = 0
 
-        ruler_birth_year = self.savegame.current_year - ruler_parenting_age - age_oldest_ruler_child
+        ruler_birth_year = self._get_year_from_age(ruler_parenting_age + age_oldest_ruler_child)
         print(f'Father birth year {ruler_birth_year}')
 
         # Create parents of current regent
@@ -118,7 +143,8 @@ class DynastyService(object):
 
         mother = self.person_service.create_random_person(self.savegame,
                                                           self.get_wife_birth_year_based_on_husband_age(
-                                                              ruler_birth_year), ps.GENDER_FEMALE, self.dynasty)
+                                                              self._get_year_from_age(ruler_birth_year)),
+                                                          ps.GENDER_FEMALE, self.dynasty)
 
         print(f'Created father {father} and mother {mother} which are supposed to have {ruler_quantity_children} '
               f'children.')
@@ -131,7 +157,7 @@ class DynastyService(object):
         child = None
         for x in range(0, ruler_quantity_children):
             if counter == 1:
-                birth_year = self.savegame.current_year - age_oldest_ruler_child
+                birth_year = self._get_year_from_age(age_oldest_ruler_child)
             else:
                 birth_year = self.get_birth_year_of_next_child(child.birth_year)
             gender = random.choice(ps.GENDER_CHOICES)[0]  # todo boy/girl ratio wasn't 50:50
@@ -139,15 +165,23 @@ class DynastyService(object):
                                                              mother)
             counter += 1
 
+            # todo make sure no child has the same name!
+            # todo child mortality!
+            # todo optional second name
+
         print(f'Created {counter - 1} children.')
 
-    def create_dynasty(self, from_location, county=None):
-
-        self.dynasty = Dynasty.objects.create(
+    def _create_dynasty_object(self, from_location, county=None):
+        return Dynasty.objects.create(
             from_location=from_location,
             ruling_over=county,
             savegame=self.savegame
         )
+
+    def create_dynasty(self, from_location, county=None):
+
+        # Create dynasty itself
+        self.dynasty = self._create_dynasty_object(from_location, county)
 
         # Create parents
         father, mother, ruler_quantity_children, age_oldest_ruler_child = self.create_couple()
@@ -156,6 +190,7 @@ class DynastyService(object):
         self.create_couples_children(ruler_quantity_children, age_oldest_ruler_child, father, mother)
 
         # Adjust savegame starting year
+        # todo this is crap!
         youngest_child = Person.objects.filter(father=father).order_by('-birth_year').first()
         if youngest_child:
             if youngest_child.age < 0:

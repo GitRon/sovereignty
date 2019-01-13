@@ -1,8 +1,10 @@
 from django.db import models
+from django.db.models import Q
 
 import apps.dynasty.settings as ps
 from apps.dynasty.managers import TraitManager, PersonManager, DynastyManager
 from apps.location.models import County
+from apps.naming.models import PersonName
 
 
 class Trait(models.Model):
@@ -49,7 +51,9 @@ class Dynasty(models.Model):
 
 
 class Person(models.Model):
-    name = models.CharField(max_length=50)
+    first_name = models.ForeignKey(PersonName, related_name='first_name_persons', on_delete=models.CASCADE)
+    middle_name = models.ForeignKey(PersonName, related_name='middle_name_persons', null=True, blank=True,
+                                    on_delete=models.CASCADE)
     nobility = models.BooleanField(default=True)
     gender = models.PositiveSmallIntegerField(choices=ps.GENDER_CHOICES)
     birth_year = models.PositiveIntegerField()
@@ -86,3 +90,41 @@ class Person(models.Model):
         if not self.death_year:
             return self.savegame.current_year - self.birth_year
         return self.death_year - self.birth_year
+
+    @property
+    def name(self):
+        return f'{self.first_name.name} {self.middle_name.name}'.strip()
+
+    @property
+    def siblings(self):
+        return Person.objects.filter(Q(father=self.father) | Q(mother=self.mother))
+
+    @property
+    def children(self):
+        return Person.objects.filter(Q(father=self) | Q(mother=self))
+
+    def get_siblings_by_gender(self, gender):
+
+        return self.siblings.filter(gender=gender)
+
+    def get_person_names(self):
+        name_list = [self.first_name]
+        if self.middle_name:
+            name_list.append(self.middle_name)
+        return name_list
+
+    def get_sibling_names(self):
+        name_list = [self.get_person_names()]
+
+        for sibling in self.get_siblings_by_gender(self.gender):
+            name_list.append(sibling.get_person_names())
+
+        return name_list
+
+    def get_children_names(self):
+        name_list = []
+
+        for child in self.children:
+            name_list.append(child.get_person_names())
+
+        return name_list

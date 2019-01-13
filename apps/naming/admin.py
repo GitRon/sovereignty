@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from apps.naming.models import LocationNamePostfix, PersonName, LocationNamePrefix
+from apps.naming.models import LocationNameSuffix, PersonName, LocationNamePrefix
 
 
 @admin.register(PersonName)
@@ -9,4 +9,4 @@ class HolidayAdmin(admin.ModelAdmin):
 
 
 admin.site.register(LocationNamePrefix)
-admin.site.register(LocationNamePostfix)
+admin.site.register(LocationNameSuffix)

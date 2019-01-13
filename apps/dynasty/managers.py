@@ -7,7 +7,7 @@ from apps.account.managers import SavegameBasedObjectManager
 
 class TraitQuerySet(models.QuerySet):
     def get_random(self, to_be_compatible_with_traits):
-        count = self.count()
+        count = self.count() - len(to_be_compatible_with_traits)
         if count > 0:
             return self.exclude(incompatible_traits__in=to_be_compatible_with_traits)[random.randint(0, count - 1)]
         return self

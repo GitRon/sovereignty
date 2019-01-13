@@ -1,4 +1,6 @@
 import os
+import random
+from unittest import mock
 
 from django.db.models import Count
 from django.test import TestCase
@@ -40,3 +42,17 @@ class NamingTest(TestCase):
 
     def test_create_location_name(self):
         self.assertGreater(len(self.ls.create_name(self.savegame)), 0)
+
+    def test_middle_name_has_name(self):
+        test_gender = ps.GENDER_MALE
+        with mock.patch('random.random', return_value=0.2):
+            middle_name = self.ps.get_middle_name(test_gender)
+
+        self.assertIsInstance(middle_name, PersonName)
+
+    def test_middle_name_has_no_name(self):
+        test_gender = ps.GENDER_MALE
+        with mock.patch('random.random', return_value=0.4):
+            middle_name = self.ps.get_middle_name(test_gender)
+
+        self.assertEqual(middle_name, None)
