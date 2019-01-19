@@ -19,5 +19,5 @@ class CountyManager(SavegameBasedObjectManager):
         return CountyQuerySet(self.model, using=self._db)  # Important!
 
 
-class MapDotManager(RandomManager):
+class MapDotManager(SavegameBasedObjectManager, RandomManager):
     pass

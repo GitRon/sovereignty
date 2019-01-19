@@ -9,10 +9,25 @@
         </div>
     </div>
 
-
-    <div class="row">
+    {% for em in event_messages %}
+        {% if forloop.counter|divisibleby:1 %}
+            <div class="row">
+        {% endif %}
+    {% if em.type == message_type_ok %}
         <div class="col s12 m6">
-            <div class="card blue-grey darken-1">
+            <div class="card teal lighten-1 hoverable">
+                <div class="card-content white-text">
+                    <span class="card-title">{{ em.title }}</span>
+                    <p>{{ em.text }}</p>
+                </div>
+                <div class="card-action">
+                    <a href="{% url 'message:mark-as-read-view' em.id %}">Acknowledge</a>
+                </div>
+            </div>
+        </div>
+    {% elif em.type == message_type_yesno %}
+        <div class="col s12 m6">
+            <div class="card blue-grey darken-1 hoverable">
                 <div class="card-content white-text">
                     <span class="card-title">Take decision</span>
                     <p>I am a very simple card. I am good at containing small bits of information.
@@ -24,31 +39,10 @@
                 </div>
             </div>
         </div>
-        <div class="col s12 m6">
-            <div class="card blue-grey darken-1">
-                <div class="card-content white-text">
-                    <span class="card-title">Enact decree</span>
-                    <p>I am a very simple card. I am good at containing small bits of information.
-                        I am convenient because I require little markup to use effectively.</p>
-                </div>
-                <div class="card-action">
-                    <a href="#">Yes</a>
-                    <a href="#">No</a>
-                </div>
-            </div>
+    {% endif %}
+    {% if forloop.counter|divisibleby:2 %}
         </div>
-        <div class="col s12 m6">
-            <div class="card teal lighten-1">
-                <div class="card-content white-text">
-                    <span class="card-title">That happended</span>
-                    <p>I am a very simple card. I am good at containing small bits of information.
-                        I am convenient because I require little markup to use effectively.</p>
-                </div>
-                <div class="card-action">
-                    <a href="#">Acknowledge</a>
-                </div>
-            </div>
-        </div>
-    </div>
+    {% endif %}
+    {% endfor %}
 
 {% endblock %}

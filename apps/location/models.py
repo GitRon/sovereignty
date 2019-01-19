@@ -22,6 +22,10 @@ class County(models.Model):
     target_size = models.PositiveIntegerField(default=0)
     savegame = models.ForeignKey('account.Savegame', related_name='counties', on_delete=models.CASCADE)
 
+    # Resources
+    gold = models.PositiveIntegerField(default=10)
+    manpower = models.PositiveIntegerField(default=10)
+
     objects = CountyManager()
 
     class Meta:
@@ -97,6 +101,10 @@ class MapDot(models.Model):
     is_capital = models.BooleanField(default=False)
     coordinate_x = models.IntegerField(db_index=True)
     coordinate_y = models.IntegerField(db_index=True)
+
+    # Resources
+    gold = models.PositiveIntegerField(default=1)
+    manpower = models.PositiveIntegerField(default=1)
 
     objects = MapDotManager()
 

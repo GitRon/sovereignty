@@ -161,10 +161,10 @@ class DynastyService(object):
 
         # Determine which age group he will reach
         # With 20% chance person dies as a baby
-        if dice < 0.2:
+        if dice < 0.2 and self.savegame.current_year - birth_year <= 1:
             death_age = random.choice([0, 1])
         # With another 20% he'll dies as a child
-        elif dice > 0.4:
+        elif dice > 0.4 and self.savegame.current_year - birth_year <= 12:
             death_age = random.randint(2, 12)
         # Otherwise he'll reaches adulthood
         else:

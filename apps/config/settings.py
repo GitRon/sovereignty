@@ -69,6 +69,7 @@ INSTALLED_APPS = [
     'apps.core',
     'apps.dynasty',
     'apps.location',
+    'apps.messaging',
     'apps.naming',
 ]
 

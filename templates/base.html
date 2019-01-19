@@ -29,33 +29,49 @@
 </head>
 <body>
 <!-- Navigation -->
-<nav>
-    <div class="nav-wrapper">
-        <div class="row">
-            <div class="col s12">
-                <a href="{% url 'account:dashboard-view' %}" class="brand-logo">Sovereignty</a>
-                <ul id="nav-mobile" class="right hide-on-med-and-down">
-                    {% if savegame_id %}
-                        <li class="{% active request 'show-map' %}">
-                            <a href="{% url 'location:show-map-view' %}">Map</a>
-                        </li>
-                        <li class="{% active request 'dynasty' %}">
-                            <a href="{% url 'dynasty:dashboard-view' %}">Dynasty</a>
-                        </li>
-                        <li class="{% active request 'my-county' %}">
-                            <a href="{% url 'location:my-county-view' %}">My county</a>
-                        </li>
-                        <li class="{% active request 'foreign-affairs' %}">
-                            <a href="#">Foreign Affairs</a>
-                        </li>
-                    {% endif %}
-                    <li class="{% active request 'menu' %}"><a href="{% url 'account:menu-view' %}">
-                        Menu <span class="badge">#{{ savegame_id }}</span></a></li>
-                </ul>
+<div class="navbar-fixed">
+    <nav>
+        <div class="nav-wrapper">
+            <div class="row">
+                <div class="col s12">
+                    <a href="{% url 'account:dashboard-view' %}" class="brand-logo">Sovereignty</a>
+                    <ul class="right hide-on-med-and-down">
+                        {% if savegame_id %}
+                            <li><a href=""><span class="badge red lighten-5">
+                                A.D. {{ savegame.current_year }}
+                            </span></a></li>
+                            <li><a href=""><span class="new badge lime darken-1" data-badge-caption="Gold">
+                                {{ savegame.playing_as.home_county.gold }}
+                            </span></a></li>
+                            <li><a href=""><span class="new badge brown lighten-2" data-badge-caption="Manpower">
+                                 {{ savegame.playing_as.home_county.manpower }}
+                            </span></a></li>
+                            <li class="{% active request 'show-map' %}">
+                                <a href="{% url 'location:show-map-view' %}">Map</a>
+                            </li>
+                            <li class="{% active request 'dynasty' %}">
+                                <a href="{% url 'dynasty:dashboard-view' %}">Dynasty</a>
+                            </li>
+                            <li class="{% active request 'my-county' %}">
+                                <a href="{% url 'location:my-county-view' %}">My county</a>
+                            </li>
+                            <li class="{% active request 'foreign-affairs' %}">
+                                <a href="#">Foreign Affairs</a>
+                            </li>
+                            <li class="{% active request 'court' %}">
+                                <a href="#">Court</a>
+                            </li>
+                        {% endif %}
+                        <li class="{% active request 'menu' %}"><a href="{% url 'account:menu-view' %}">
+                            Menu <span class="badge">#{{ savegame_id }}</span></a></li>
+                        <li class="cursor-pointer"><a href="{% url 'account:finish-year-view' %}">
+                            <i class="fa fa-play"></i></a></li>
+                    </ul>
+                </div>
             </div>
         </div>
-    </div>
-</nav>
+    </nav>
+</div>
 <div class="container">
 
     <!-- Page Content goes here -->
