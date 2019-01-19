@@ -6,6 +6,7 @@ from apps.account.models import Savegame
 from apps.dynasty.models import Person, Dynasty
 from apps.dynasty.services import DynastyService
 from apps.dynasty import settings as ps
+from apps.location.models import County
 
 
 class DynastyTest(TestCase):
@@ -25,6 +26,10 @@ class DynastyTest(TestCase):
     def test_get_year_from_age(self):
         test_age = 50
         self.assertEqual(self.ds._get_year_from_age(50), self.savegame.current_year - test_age)
+
+    def test_get_age_from_year(self):
+        test_year = 750
+        self.assertEqual(self.ds._get_age_from_year(test_year), self.savegame.current_year - test_year)
 
     def test_get_parenting_age_male(self):
         with mock.patch('random.gauss', return_value=self.ds.DEFAULT_PARENTING_AGE):
@@ -85,3 +90,15 @@ class DynastyTest(TestCase):
     def test_create_dynasty(self):
         dynasty = self.ds.create_dynasty('Myland')
         self.assertIsInstance(dynasty, Dynasty)
+
+    def test_create_dynasty_object_for_county(self):
+        county = County.objects.create(name='Myland', savegame=self.savegame)
+        dynasty = self.ds._create_dynasty_object('Myland', county)
+        self.assertIsInstance(dynasty, Dynasty)
+        self.assertEqual(county.ruled_by, dynasty)
+
+    def test_calculate_year_of_death(self):
+        with mock.patch('random.gauss', return_value=0.5):
+            death_year = self.ds.calculate_year_of_death(750)
+
+        self.assertGreaterEqual(death_year, 0)

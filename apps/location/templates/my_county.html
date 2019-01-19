@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+{% load utils %}
+
+{% block content %}
+    <div class="row">
+        <div class="col s12">
+            <h1>{{ object }}</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s6">
+            <table class="striped">
+                <tr>
+                    <td>Name</td>
+                    <td>{{ object.name }}</td>
+                </tr>
+                <tr>
+                    <td>Number of provinces</td>
+                    <td>{{ object.size }}</td>
+                </tr>
+                <tr>
+                    <td>Color</td>
+                    <td>
+                        <div class="color-preview"
+                             style="background-color: {{ object.primary_color }}"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Ruler</td>
+                    <td>{{ object.ruled_by.current_dynast }}</td>
+                </tr>
+            </table>
+        </div>
+{% endblock %}

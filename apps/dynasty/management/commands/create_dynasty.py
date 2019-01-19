@@ -1,10 +1,8 @@
 from django.core.management.base import BaseCommand
 
 from apps.account.models import Savegame
-from apps.dynasty.models import Trait
-from apps.dynasty.services import PersonService, DynastyService
-from apps.dynasty import settings as ps
-from apps.location.models import County
+from apps.dynasty.models import Dynasty
+from apps.dynasty.services import DynastyService
 
 
 class Command(BaseCommand):
@@ -18,6 +16,9 @@ class Command(BaseCommand):
         savegame = Savegame.objects.get(pk=savegame_id)
 
         county = savegame.counties.all().get_random()
+
+        # Reset all dynasty home counties
+        Dynasty.objects.all().update(home_county=None)
 
         dynasty_service = DynastyService(savegame)
         dynasty = dynasty_service.create_dynasty(county.name, county)

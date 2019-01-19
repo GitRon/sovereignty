@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 
+
 from apps.location.managers import MapDotManager, CountyManager
 
 
@@ -16,6 +17,8 @@ class County(models.Model):
 
     name = models.CharField(max_length=NAME_LENGTH)
     primary_color = models.CharField(max_length=10, null=True, blank=True)
+    ruled_by = models.ForeignKey("dynasty.Dynasty", related_name='ruling_over', null=True, blank=True,
+                                 on_delete=models.CASCADE)
     target_size = models.PositiveIntegerField(default=0)
     savegame = models.ForeignKey('account.Savegame', related_name='counties', on_delete=models.CASCADE)
 

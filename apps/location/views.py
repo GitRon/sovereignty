@@ -4,6 +4,7 @@ from django.shortcuts import redirect
 from django.views import generic
 
 from apps.account.managers import SavegameManager
+from apps.account.models import Savegame
 from apps.location.models import Map, MapDot, County
 from apps.location.services.map import MapService
 
@@ -30,7 +31,7 @@ class ShowMapDashboard(generic.TemplateView):
         if not self.canvas_map.is_fully_processed():
             raise Exception('Map is not fully processed.')
 
-        context['county_list'] = MapDot.objects.filter(map=self.canvas_map, is_water=False)\
+        context['county_list'] = MapDot.objects.filter(map=self.canvas_map, is_water=False) \
             .values('county__name', 'county__primary_color') \
             .annotate(province_count=Count('id')).order_by('-province_count')
 
@@ -59,3 +60,12 @@ class MapDotDetail(generic.TemplateView):
         context['map_dot'] = MapDot.objects.get(map=self.kwargs['map_id'], coordinate_x=x, coordinate_y=y)
 
         return context
+
+
+class MyCounty(generic.DetailView):
+    model = County
+    template_name = 'my_county.html'
+
+    def get_object(self, queryset=None):
+        savegame = Savegame.objects.get(pk=SavegameManager.get_from_session(self.request))
+        return savegame.playing_as.home_county

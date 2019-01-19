@@ -38,7 +38,8 @@ class Trait(models.Model):
 
 class Dynasty(models.Model):
     from_location = models.CharField(max_length=County.NAME_LENGTH)
-    ruling_over = models.ForeignKey(County, related_name='natives', null=True, blank=True, on_delete=models.CASCADE)
+    home_county = models.OneToOneField(County, related_name='native_dynasty', null=True, blank=True,
+                                       on_delete=models.CASCADE)
     current_dynast = models.ForeignKey("Person", related_name='rules_over', null=True, blank=True,
                                        on_delete=models.CASCADE)
     # System attributes
@@ -93,7 +94,13 @@ class Person(models.Model):
 
     @property
     def name(self):
-        return f'{self.first_name.name} {self.middle_name.name}'.strip()
+        if self.middle_name:
+            return f'{self.first_name.name} {self.middle_name.name}'
+        return self.first_name.name
+
+    @property
+    def is_dead(self):
+        return self.death_year
 
     @property
     def siblings(self):

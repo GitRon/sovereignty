@@ -7,9 +7,9 @@ class CreateCountyService(object):
 
     @staticmethod
     def create_random_county(savegame: Savegame):
-        person = County.objects.create(
+        county = County.objects.create(
             name=LocationNameService.create_name(savegame),
             savegame=savegame
         )
 
-        return person
+        return county

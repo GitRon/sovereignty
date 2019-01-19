@@ -36,14 +36,14 @@
                 <a href="{% url 'account:dashboard-view' %}" class="brand-logo">Sovereignty</a>
                 <ul id="nav-mobile" class="right hide-on-med-and-down">
                     {% if savegame_id %}
-                        <li class="{% active request 'location' %}">
+                        <li class="{% active request 'show-map' %}">
                             <a href="{% url 'location:show-map-view' %}">Map</a>
                         </li>
                         <li class="{% active request 'dynasty' %}">
                             <a href="{% url 'dynasty:dashboard-view' %}">Dynasty</a>
                         </li>
-                        <li class="{% active request 'country' %}">
-                            <a href="#">Country</a>
+                        <li class="{% active request 'my-county' %}">
+                            <a href="{% url 'location:my-county-view' %}">My county</a>
                         </li>
                         <li class="{% active request 'foreign-affairs' %}">
                             <a href="#">Foreign Affairs</a>

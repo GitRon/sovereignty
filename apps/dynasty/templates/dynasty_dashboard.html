@@ -20,7 +20,7 @@
                         </td>
                         <td>{% include 'partials/_gender_icon.html' with person=person gender_male=gender_male %}</td>
                         <td>AD {{ person.birth_year }}</td>
-                        <td>{{ person.age }} years</td>
+                        <td>{{ person.age }} years {% if person.is_dead %}&dagger;{% endif %}</td>
                     </tr>
                 {% endfor %}
             </table>

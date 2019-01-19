@@ -1021,6 +1021,13 @@
     }
   },
   {
+    "model": "naming.locationnameprefix",
+    "pk": 60,
+    "fields": {
+      "text": "Rung"
+    }
+  },
+  {
     "model": "naming.locationnamesuffix",
     "pk": 1,
     "fields": {
@@ -1417,6 +1424,13 @@
     "pk": 57,
     "fields": {
       "text": "um"
+    }
+  },
+  {
+    "model": "naming.locationnamesuffix",
+    "pk": 58,
+    "fields": {
+      "text": "hold"
     }
   }
 ]

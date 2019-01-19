@@ -48,7 +48,7 @@ class PersonService(object):
         # Get first name and optional middle name
         first_name = self.pns.get_name(gender, name_exclude_list)
         name_exclude_list.append(first_name)
-        middle_name = self.pns.get_name(gender, name_exclude_list)
+        middle_name = self.pns.get_middle_name(gender, name_exclude_list)
 
         person = Person.objects.create(
             first_name=first_name,
@@ -69,6 +69,8 @@ class PersonService(object):
         trait_list = self.get_trait_set()
         for trait in trait_list:
             person.traits.add(trait)
+
+        print(f'Created person {person}.')
 
         return person
 
@@ -96,6 +98,9 @@ class DynastyService(object):
 
     def _get_year_from_age(self, age):
         return self.savegame.current_year - age
+
+    def _get_age_from_year(self, birth_year):
+        return self.savegame.current_year - birth_year
 
     def get_parenting_age(self, gender):
         """
@@ -151,6 +156,22 @@ class DynastyService(object):
 
         return father, mother, ruler_quantity_children, age_oldest_ruler_child
 
+    def calculate_year_of_death(self, birth_year):
+        dice = random.random()
+
+        # Determine which age group he will reach
+        # With 20% chance person dies as a baby
+        if dice < 0.2:
+            death_age = random.choice([0, 1])
+        # With another 20% he'll dies as a child
+        elif dice > 0.4:
+            death_age = random.randint(2, 12)
+        # Otherwise he'll reaches adulthood
+        else:
+            death_age = 62 * pow(dice,  2.5) + 12
+
+        return birth_year + round(death_age)
+
     def create_couples_children(self, ruler_quantity_children, age_oldest_ruler_child, father, mother):
         # Create children
         counter = 1
@@ -165,18 +186,26 @@ class DynastyService(object):
                                                              mother)
             counter += 1
 
-            # todo make sure no child has the same name!
-            # todo child mortality!
-            # todo optional second name
+            # Child mortality
+            death_year = self.calculate_year_of_death(child.birth_year)
+            if death_year and death_year < self.savegame.current_year:
+                print(f'{child} dies in year {death_year}.')
+                child.death_year = death_year
+                child.save()
 
         print(f'Created {counter - 1} children.')
 
     def _create_dynasty_object(self, from_location, county=None):
-        return Dynasty.objects.create(
+        dynasty = Dynasty.objects.create(
             from_location=from_location,
-            ruling_over=county,
+            home_county=county,
             savegame=self.savegame
         )
+        if county:
+            county.ruled_by = dynasty
+            county.save()
+
+        return dynasty
 
     def create_dynasty(self, from_location, county=None):
 
