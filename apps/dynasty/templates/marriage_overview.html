@@ -1,0 +1,66 @@
+{% extends "base_dynasty.html" %}
+
+{% block content %}
+    <div class="row">
+        <div class="col s12">
+            <h1>Marriageable noble women</h1>
+        </div>
+        <div class="col s12">
+            <h3><i>{{ count_own_marriageable_men }} men in dynasty</i></h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12">
+            <table class="striped">
+                {% for person in marriageable_women %}
+                    <tr>
+                        <td><a href="{% url 'dynasty:person-detail-view' person.id %}">{{ person }}</a></td>
+                        <td>{% include 'partials/_gender_icon.html' with person=person gender_male=gender_male %}</td>
+                        <td>AD {{ person.birth_year }}</td>
+                        <td>{{ person.age }} years {% if person.is_dead %}&dagger;{% endif %}</td>
+                        <td>
+                            {% if count_own_marriageable_men %}
+                                <a class="waves-effect waves-light btn"
+                                   href="{% url 'dynasty:marrying-form-view' person.id %}">
+                                    <i class="right fa fa-gem"></i>Marry</a>
+                            {% else %}
+                                <i class="fa fa-times-circle"></i>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12">
+            <h1>Marriageable noble men</h1>
+        </div>
+        <div class="col s12">
+            <h3><i>{{ count_own_marriageable_women }} women in dynasty</i></h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12">
+            <table class="striped">
+                {% for person in marriageable_men %}
+                    <tr>
+                        <td><a href="{% url 'dynasty:person-detail-view' person.id %}">{{ person }}</a></td>
+                        <td>{% include 'partials/_gender_icon.html' with person=person gender_male=gender_male %}</td>
+                        <td>AD {{ person.birth_year }}</td>
+                        <td>{{ person.age }} years {% if person.is_dead %}&dagger;{% endif %}</td>
+                        <td>
+                            {% if count_own_marriageable_women %}
+                                <a class="waves-effect waves-light btn"
+                                   href="{% url 'dynasty:marrying-form-view' person.id %}">
+                                    <i class="right fa fa-gem"></i>Marry</a>
+                            {% else %}
+                                <i class="fa fa-times-circle"></i>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock %}

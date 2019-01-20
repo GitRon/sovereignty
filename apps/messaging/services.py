@@ -12,6 +12,7 @@ class MessageService(object):
     def person_dies_natural_cause(self, person: Person):
         message = EventMessage()
         message.title = f'{person.name} died!'
+        # todo add some random reasons like this or that sickness
         message.text = f'Unfortunately {person.name} died at age {person.age} on natural causes. He will be mourned.'
         message.type = EventMessage.TYPE_OK
         message.created_in_year = self.savegame.current_year

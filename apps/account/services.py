@@ -35,12 +35,9 @@ class FinishYearService(object):
     def _grim_reaper(self):
 
         # Get all living persons
-        person_list = Person.objects.get_visible(savegame=self.savegame).filter(death_year__isnull=True)
+        died_person_list = Person.objects.get_visible(savegame=self.savegame).filter(
+            death_year=self.savegame.current_year)
 
-        for person in person_list:
-            # todo this kills basically everyone...
-            target_death_year = self.ds.calculate_year_of_death(person.birth_year)
-            if target_death_year <= self.savegame.current_year:
-                person.death_year = self.savegame.current_year
-                person.save()
-                self.ms.person_dies_natural_cause(person)
+        for person in died_person_list:
+            # todo only inform about closely related people
+            self.ms.person_dies_natural_cause(person)

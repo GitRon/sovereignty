@@ -1,5 +1,7 @@
 from django.db import models
 from django.db.models import Q
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 
 import apps.dynasty.settings as ps
 from apps.dynasty.managers import TraitManager, PersonManager, DynastyManager
@@ -69,6 +71,8 @@ class Person(models.Model):
                                on_delete=models.CASCADE)
     mother = models.ForeignKey("Person", related_name='mothers_children', null=True, blank=True,
                                on_delete=models.CASCADE)
+    spouse = models.OneToOneField("Person", related_name='married_to', null=True, blank=True,
+                                  on_delete=models.CASCADE)
 
     # Skills (scale from 0 - 100)
     leadership = models.PositiveIntegerField(default=50)
@@ -88,8 +92,10 @@ class Person(models.Model):
 
     @property
     def age(self):
-        if not self.death_year:
+        # If person is not already dead show current age
+        if self.death_year > self.savegame.current_year:
             return self.savegame.current_year - self.birth_year
+        # Show final age instead
         return self.death_year - self.birth_year
 
     @property
@@ -100,7 +106,7 @@ class Person(models.Model):
 
     @property
     def is_dead(self):
-        return self.death_year
+        return self.death_year <= self.savegame.current_year
 
     @property
     def siblings(self):
@@ -135,3 +141,11 @@ class Person(models.Model):
             name_list.append(child.get_person_names())
 
         return name_list
+
+
+@receiver(pre_save, sender=Person, dispatch_uid="person.set_death_year")
+def set_death_year(sender, instance, **kwargs):
+    if not instance.death_year:
+        from apps.dynasty.services import DynastyService
+        ds = DynastyService(instance.savegame)
+        instance.death_year = ds.calculate_year_of_death(instance.birth_year)

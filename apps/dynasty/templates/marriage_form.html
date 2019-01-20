@@ -1,0 +1,18 @@
+{% extends "base_dynasty.html" %}
+{% load crispy_forms_tags %}
+
+{% block js %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('select').formSelect();
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col s12">
+            {% crispy form %}
+        </div>
+    </div>
+{% endblock %}

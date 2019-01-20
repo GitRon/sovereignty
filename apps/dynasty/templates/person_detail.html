@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base_dynasty.html" %}
 
 {% block content %}
     <div class="row">
@@ -32,12 +32,34 @@
                     </td>
                 </tr>
                 <tr>
+                    <td>Spouse</td>
+                    <td>
+                        {% if object.spouse %}
+                            <a href="{% url 'dynasty:person-detail-view' object.spouse.id %}">{{ object.spouse }}</a>
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
                     <td>Father</td>
-                    <td>{{ object.father|default_if_none:"unknown" }}</td>
+                    <td>
+                        {% if object.father %}
+                            <a href="{% url 'dynasty:person-detail-view' object.father.id %}">{{ object.father }}</a>
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
                 </tr>
                 <tr>
                     <td>Mother</td>
-                    <td>{{ object.mother|default_if_none:"unknown" }}</td>
+                    <td>
+                        {% if object.mother %}
+                            <a href="{% url 'dynasty:person-detail-view' object.mother.id %}">{{ object.mother }}</a>
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
                 </tr>
                 <tr>
                     <td>Leadership</td>

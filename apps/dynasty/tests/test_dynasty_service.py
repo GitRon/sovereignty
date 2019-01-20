@@ -25,11 +25,11 @@ class DynastyTest(TestCase):
 
     def test_get_year_from_age(self):
         test_age = 50
-        self.assertEqual(self.ds._get_year_from_age(50), self.savegame.current_year - test_age)
+        self.assertEqual(self.ds.get_year_from_age(50), self.savegame.current_year - test_age)
 
     def test_get_age_from_year(self):
         test_year = 750
-        self.assertEqual(self.ds._get_age_from_year(test_year), self.savegame.current_year - test_year)
+        self.assertEqual(self.ds.get_age_from_year(test_year), self.savegame.current_year - test_year)
 
     def test_get_parenting_age_male(self):
         with mock.patch('random.gauss', return_value=self.ds.DEFAULT_PARENTING_AGE):

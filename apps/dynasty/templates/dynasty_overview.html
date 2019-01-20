@@ -1,8 +1,7 @@
-{% extends "base.html" %}
+{% extends "base_dynasty.html" %}
 
 {% block content %}
     <div class="row">
-        {#  todo add breadcrumbs  #}
         <div class="col s12">
             <h1>My dynasty</h1>
         </div>
@@ -10,9 +9,24 @@
     <div class="row">
         <div class="col s12">
             <table class="striped">
+                <tr>
+                    <th>Person</th>
+                    <th>Spouse</th>
+                    <th>Rank</th>
+                    <th>Gender</th>
+                    <th>Birth year</th>
+                    <th>Age</th>
+                </tr>
                 {% for person in person_list %}
                     <tr>
                         <td><a href="{% url 'dynasty:person-detail-view' person.id %}">{{ person }}</a></td>
+                        <td>
+                            {% if person.spouse %}
+                                <a href="{% url 'dynasty:person-detail-view' person.spouse.id %}">{{ person.spouse }}</a>
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
                         <td>
                             {% if person == person.dynasty.current_dynast %}
                                 <i class="fas fa-crown" title="Current dynast"></i>

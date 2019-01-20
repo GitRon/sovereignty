@@ -1,13 +1,8 @@
 import random
 
-from apps.account.managers import SavegameManager
-from apps.core.utils import get_rand_bool
-from apps.location.models import County
-from apps.naming.models import PersonName
-from apps.naming.services import PersonNameService
-from apps.dynasty.models import Person, Trait, Dynasty
-
 from apps.dynasty import settings as ps
+from apps.dynasty.models import Person, Trait, Dynasty
+from apps.naming.services import PersonNameService
 
 
 class PersonService(object):
@@ -96,10 +91,10 @@ class DynastyService(object):
     def __init__(self, savegame) -> None:
         self.savegame = savegame
 
-    def _get_year_from_age(self, age):
+    def get_year_from_age(self, age):
         return self.savegame.current_year - age
 
-    def _get_age_from_year(self, birth_year):
+    def get_age_from_year(self, birth_year):
         return self.savegame.current_year - birth_year
 
     def get_parenting_age(self, gender):
@@ -118,8 +113,8 @@ class DynastyService(object):
         return round(max(random.gauss(self.AVG_QUANTITY_CHILDREN, self.AVG_QUANTITY_CHILDREN_SIGMA), 0))
 
     def get_wife_birth_year_based_on_husband_age(self, age_husband):
-        year = self._get_year_from_age(round(max(
-            age_husband + random.gauss(
+        year = self.get_year_from_age(round(max(
+            age_husband - random.gauss(
                 self.MOTHER_AGE_OFFSET_TO_HUSBAND,
                 self.MOTHER_AGE_OFFSET_TO_SIGMA),
             self.MIN_PARENTING_AGE_FEMALE)))
@@ -140,16 +135,28 @@ class DynastyService(object):
         else:
             age_oldest_ruler_child = 0
 
-        ruler_birth_year = self._get_year_from_age(ruler_parenting_age + age_oldest_ruler_child)
+        ruler_birth_year = self.get_year_from_age(ruler_parenting_age + age_oldest_ruler_child)
         print(f'Father birth year {ruler_birth_year}')
 
         # Create parents of current regent
         father = self.person_service.create_random_person(self.savegame, ruler_birth_year, ps.GENDER_MALE, self.dynasty)
 
+        # todo mother is from different dynasty
+        # todo i guess i have to assign the mother when all dynasties are created
         mother = self.person_service.create_random_person(self.savegame,
                                                           self.get_wife_birth_year_based_on_husband_age(
-                                                              self._get_year_from_age(ruler_birth_year)),
+                                                              self.get_year_from_age(ruler_birth_year)),
                                                           ps.GENDER_FEMALE, self.dynasty)
+
+        # Update death year of parents (some time within the next 10 years)
+        father.death_year = self.savegame.current_year + random.randint(0, 10)
+        mother.death_year = self.savegame.current_year + random.randint(0, 10)
+
+        # Set marriage
+        father.spouse = mother
+        mother.spouse = father
+        father.save()
+        mother.save()
 
         print(f'Created father {father} and mother {mother} which are supposed to have {ruler_quantity_children} '
               f'children.')
@@ -163,11 +170,12 @@ class DynastyService(object):
         # With 20% chance person dies as a baby
         if dice < 0.2 and self.savegame.current_year - birth_year <= 1:
             death_age = random.choice([0, 1])
-        # With another 20% he'll dies as a child
+        # With another 20% he'll die as a child
         elif dice > 0.4 and self.savegame.current_year - birth_year <= 12:
             death_age = random.randint(2, 12)
         # Otherwise he'll reaches adulthood
         else:
+            dice = random.random()
             death_age = 62 * pow(dice,  2.5) + 12
 
         return birth_year + round(death_age)
@@ -178,7 +186,7 @@ class DynastyService(object):
         child = None
         for x in range(0, ruler_quantity_children):
             if counter == 1:
-                birth_year = self._get_year_from_age(age_oldest_ruler_child)
+                birth_year = self.get_year_from_age(age_oldest_ruler_child)
             else:
                 birth_year = self.get_birth_year_of_next_child(child.birth_year)
             gender = random.choice(ps.GENDER_CHOICES)[0]  # todo boy/girl ratio wasn't 50:50
@@ -230,3 +238,44 @@ class DynastyService(object):
         self.dynasty.save()
 
         return self.dynasty
+
+
+class MarriageService(object):
+
+    ds = None
+    savegame = None
+
+    def __init__(self, savegame_id):
+        from apps.account.models import Savegame
+        self.savegame = Savegame.objects.get(pk=savegame_id)
+        self.ds = DynastyService(self.savegame)
+
+    def _get_base_marriage_queryset(self):
+        return Person.objects.get_visible(savegame=self.savegame).filter(
+            death_year__gt=self.ds.savegame.current_year, spouse__isnull=True)
+
+    def _get_age_restrictions(self, gender):
+        if gender == ps.GENDER_MALE:
+            max_birth_year = self.ds.get_year_from_age(ps.MIN_NUBILE_AGE_MEN)
+            min_birth_year = self.savegame.current_year - 200
+        else:
+            max_birth_year = self.ds.get_year_from_age(ps.MIN_NUBILE_AGE_WOMEN)
+            min_birth_year = self.ds.get_year_from_age(ps.MAX_NUBILE_AGE_WOMEN)
+
+        return min_birth_year, max_birth_year
+
+    def get_marriageable_persons(self, gender):
+
+        min_birth_year, max_birth_year = self._get_age_restrictions(gender)
+
+        return self._get_base_marriage_queryset().filter(
+            birth_year__range=[min_birth_year, max_birth_year],
+            gender=gender).exclude(dynasty=self.savegame.playing_as)
+
+    def get_marriageable_person_of_own_dynasty(self, gender):
+
+        min_birth_year, max_birth_year = self._get_age_restrictions(gender)
+
+        return self._get_base_marriage_queryset().filter(
+            birth_year__range=[min_birth_year, max_birth_year],
+            gender=gender, dynasty=self.savegame.playing_as)
