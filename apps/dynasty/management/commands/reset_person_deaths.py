@@ -6,6 +6,8 @@ from apps.dynasty.models import Person
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
+        Person.objects.update(death_year=None)
+
         person_list = Person.objects.all()
 
         for person in person_list:
