@@ -1,9 +1,10 @@
 import random
 
 from django.db import models
+from django.db.models import Sum
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
-
+from apps.military import settings as ms
 
 from apps.location.managers import MapDotManager, CountyManager
 
@@ -39,6 +40,20 @@ class County(models.Model):
 
     def get_primary_color_as_rgb(self):
         return list(int(self.primary_color.lstrip('#')[i:i + 2], 16) for i in (0, 2, 4))
+
+    @property
+    def max_regiments(self):
+        return max(int(self.map_dots.count() / ms.MAX_REGIMENT_DIVISOR), ms.MIN_MAX_REGIMENTS)
+
+    @property
+    def regiment_costs(self):
+        from apps.military.models import Regiment
+        return Regiment.objects.filter(county=self).aggregate(sum_costs=Sum('type__costs'))['sum_costs']
+
+    @property
+    def army_size(self):
+        from apps.military.models import Regiment
+        return Regiment.objects.filter(county=self).aggregate(sum_men=Sum('current_men'))['sum_men']
 
 
 @receiver(pre_save, sender=County, dispatch_uid="county.set_primary_color")

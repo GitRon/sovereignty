@@ -71,6 +71,7 @@ INSTALLED_APPS = [
     'apps.dynasty',
     'apps.location',
     'apps.messaging',
+    'apps.military',
     'apps.naming',
 ]
 
@@ -82,6 +83,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'apps.military.middlewares.RedirectToActiveBattleMiddleware',
 ]
 
 ROOT_URLCONF = 'apps.config.urls'

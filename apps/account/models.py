@@ -24,6 +24,10 @@ class Savegame(models.Model):
         date_str = date(self.created_at, 'd.m.Y H:i')
         return f'#{self.id} - {date_str}'
 
+    @property
+    def current_county(self):
+        return self.playing_as.home_county
+
 
 @receiver(pre_save, sender=Savegame, dispatch_uid="savegame.set_current_year")
 def set_current_year(sender, instance, **kwargs):

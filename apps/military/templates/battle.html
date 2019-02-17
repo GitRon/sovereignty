@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load utils %}
+
+{% block content %}
+    <div class="row">
+        <div class="col s12 m6">
+            <div id="battlefield">
+                {% for tile in battle_data.battlefield_tiles %}
+                    <div class="battle-tile"
+                         style="left: {{ tile.coordinate_x|multiply:4 }}em; top: {{ tile.coordinate_y|multiply:4 }}em">
+                        <div class="battle-tile-info">{{ tile.coordinate_x }}/{{ tile.coordinate_y }}</div>
+                        {% if tile.regiment %}
+                            <div class="battle-regiment center-align">
+                                <div>
+                                    <i class="fas fa-male" style="color: {{ tile.regiment.county.primary_color }}"></i>
+                                </div>
+                                <div class="regiment-label">{{ tile.regiment.name }}</div>
+                                <div class="regiment-label">{{ tile.regiment.county }}</div>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col s12 m6">
+            <table>
+                <tr>
+                    <th>Regiment</th>
+                    <th>Actions</th>
+                </tr>
+                {% for regiment in my_regiments %}
+                    <tr>
+                        <td>{{ regiment }}</td>
+                        <td>
+                            <a class="waves-effect waves-light btn blue lighten-2"
+                               href="#">
+                                <i class="fas fa-arrow-right"></i></a>
+                            <a class="waves-effect waves-light btn blue lighten-2"
+                               href="#">
+                                <i class="fas fa-arrow-up"></i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock %}

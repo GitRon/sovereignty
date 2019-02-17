@@ -9,7 +9,7 @@ def current_savegame(request):
     if savegame_id:
         savegame = Savegame.objects.get(id=savegame_id)
 
-    return  {
+    return {
         'savegame_id': savegame_id,
         'savegame': savegame,
     }

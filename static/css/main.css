@@ -6,3 +6,27 @@
     width: 20px;
     height: 20px;
 }
+
+/* Battle */
+
+#battlefield {
+    position: relative;
+}
+
+.battle-tile {
+    border: 1px solid grey;
+    position: absolute;
+    height: 4em;
+    width: 4em;
+}
+
+.battle-tile-info {
+    font-size: 0.5em;
+    color: lightgray;
+}
+
+.battle-regiment .regiment-label {
+    font-size: 0.5em;
+}
+
+/* END Battle */

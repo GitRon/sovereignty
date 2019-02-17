@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="row">
+        <div class="col m12">
+            <h1>My regiments</h1>
+            <table class="striped">
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Current size</th>
+                    <th>Costs</th>
+                    <th></th>
+                </tr>
+                {% for regiment in savegame.playing_as.home_county.regiments.all %}
+                    <tr>
+                        <td>{{ regiment.name }}</td>
+                        <td>{{ regiment.type }}</td>
+                        <td>{{ regiment.current_men }} men</td>
+                        <td>{{ regiment.type.costs }} gold</td>
+                        <td>
+                            <a class="waves-effect waves-light btn"
+                               href="{% url 'military:regiment-detail-view' regiment.id %}">
+                                <i class="right fa fa-search"></i>Details</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <th>Total</th>
+                    <th>&nbsp;</th>
+                    <th>{{ savegame.playing_as.home_county.army_size }} men</th>
+                    <th>{{ savegame.playing_as.home_county.regiment_costs }} gold</th>
+                    <th></th>
+                </tr>
+            </table>
+        </div>
+    </div>
+{% endblock %}

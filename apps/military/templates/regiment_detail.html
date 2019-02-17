@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="row">
+        <div class="col s12 m6">
+            <h2>Regiment</h2>
+            <table class="striped">
+                <tr>
+                    <th>Name</th>
+                    <td>{{ object.name }}</td>
+                </tr>
+                <tr>
+                    <th>Current size</th>
+                    <td>{{ object.current_men }}</td>
+                </tr>
+            </table>
+            <h2>Regiment type</h2>
+            <table class="striped">
+                <tr>
+                    <th>Name</th>
+                    <td>{{ object.type.name }}</td>
+                </tr>
+                <tr>
+                    <th>Attack</th>
+                    <td>{{ object.type.attack_value }}</td>
+                </tr>
+                <tr>
+                    <th>Defense</th>
+                    <td>{{ object.type.defense_value }}</td>
+                </tr>
+                <tr>
+                    <th>Costs</th>
+                    <td>{{ object.type.costs }}</td>
+                </tr>
+                <tr>
+                    <th>Morale</th>
+                    <td>{{ object.type.morale }}</td>
+                </tr>
+                <tr>
+                    <th>Steps</th>
+                    <td>{{ object.type.steps_per_turn }}</td>
+                </tr>
+                <tr>
+                    <th>Range distance</th>
+                    <td>
+                        {% if object.type.is_long_range %}
+                            {{ object.type.long_range_tile_distance }}
+                        {% else %}
+                            0
+                        {% endif %}
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="col s12 m6">
+            <h2>Options</h2>
+            {% for type in upgradable_regiment_types %}
+                <div class="row">
+                <a class="waves-effect waves-light btn blue lighten-2"
+                   href="{% url 'military:regiment-training-view' object.id type.id %}">
+                    <i class="right fas fa-long-arrow-alt-up"></i>Train to {{ type }}</a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

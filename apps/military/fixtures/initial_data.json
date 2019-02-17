@@ -1,0 +1,92 @@
+[
+  {
+    "model": "military.regimenttype",
+    "pk": 1,
+    "fields": {
+      "name": "Peasants",
+      "attack_value": 1,
+      "defense_value": 1,
+      "costs": 0,
+      "morale": 30,
+      "steps_per_turn": 1,
+      "is_long_range": false,
+      "long_range_tile_distance": null,
+      "default_type": true
+    }
+  },
+  {
+    "model": "military.regimenttype",
+    "pk": 2,
+    "fields": {
+      "name": "Spearmen",
+      "attack_value": 1,
+      "defense_value": 2,
+      "costs": 1,
+      "morale": 40,
+      "steps_per_turn": 1,
+      "is_long_range": false,
+      "long_range_tile_distance": null,
+      "default_type": false
+    }
+  },
+  {
+    "model": "military.regimenttype",
+    "pk": 3,
+    "fields": {
+      "name": "Crossbowmen",
+      "attack_value": 3,
+      "defense_value": 0,
+      "costs": 1,
+      "morale": 30,
+      "steps_per_turn": 1,
+      "is_long_range": true,
+      "long_range_tile_distance": 1,
+      "default_type": false
+    }
+  },
+  {
+    "model": "military.regimenttype",
+    "pk": 4,
+    "fields": {
+      "name": "Archers",
+      "attack_value": 3,
+      "defense_value": 0,
+      "costs": 2,
+      "morale": 50,
+      "steps_per_turn": 1,
+      "is_long_range": true,
+      "long_range_tile_distance": 2,
+      "default_type": false
+    }
+  },
+  {
+    "model": "military.regimenttype",
+    "pk": 5,
+    "fields": {
+      "name": "Light Cavalry",
+      "attack_value": 2,
+      "defense_value": 1,
+      "costs": 3,
+      "morale": 50,
+      "steps_per_turn": 2,
+      "is_long_range": false,
+      "long_range_tile_distance": null,
+      "default_type": false
+    }
+  },
+  {
+    "model": "military.regimenttype",
+    "pk": 6,
+    "fields": {
+      "name": "Heavy Infantry",
+      "attack_value": 3,
+      "defense_value": 3,
+      "costs": 4,
+      "morale": 70,
+      "steps_per_turn": 1,
+      "is_long_range": false,
+      "long_range_tile_distance": null,
+      "default_type": false
+    }
+  }
+]
