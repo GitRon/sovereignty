@@ -54,3 +54,6 @@ class FinishYear(generic.RedirectView):
 
         return super().get(request, *args, **kwargs)
 
+
+class ImprintView(generic.TemplateView):
+    template_name = 'imprint.html'

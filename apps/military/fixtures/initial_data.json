@@ -11,7 +11,8 @@
       "steps_per_turn": 1,
       "is_long_range": false,
       "long_range_tile_distance": null,
-      "default_type": true
+      "default_type": true,
+      "icon_path": "img/flaticon/freepik/scythe-and-trident.svg"
     }
   },
   {
@@ -26,7 +27,8 @@
       "steps_per_turn": 1,
       "is_long_range": false,
       "long_range_tile_distance": null,
-      "default_type": false
+      "default_type": false,
+      "icon_path": "img/flaticon/freepik/spear.svg"
     }
   },
   {
@@ -41,7 +43,8 @@
       "steps_per_turn": 1,
       "is_long_range": true,
       "long_range_tile_distance": 1,
-      "default_type": false
+      "default_type": false,
+      "icon_path": "img/flaticon/freepik/crossbow.svg"
     }
   },
   {
@@ -56,7 +59,8 @@
       "steps_per_turn": 1,
       "is_long_range": true,
       "long_range_tile_distance": 2,
-      "default_type": false
+      "default_type": false,
+      "icon_path": "img/flaticon/freepik/bow.svg"
     }
   },
   {
@@ -71,7 +75,8 @@
       "steps_per_turn": 2,
       "is_long_range": false,
       "long_range_tile_distance": null,
-      "default_type": false
+      "default_type": false,
+      "icon_path": "img/flaticon/freepik/light-horse.svg"
     }
   },
   {
@@ -86,7 +91,1024 @@
       "steps_per_turn": 1,
       "is_long_range": false,
       "long_range_tile_distance": null,
-      "default_type": false
+      "default_type": false,
+      "icon_path": "img/flaticon/freepik/heavy-infantry.svg"
+    }
+  },
+  {
+    "model": "military.regimenttype",
+    "pk": 7,
+    "fields": {
+      "name": "Knights",
+      "attack_value": 5,
+      "defense_value": 3,
+      "costs": 0,
+      "morale": 100,
+      "steps_per_turn": 1,
+      "is_long_range": false,
+      "long_range_tile_distance": null,
+      "default_type": false,
+      "icon_path": "img/flaticon/freepik/knight.svg"
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 1,
+    "fields": {
+      "coordinate_x": 0,
+      "coordinate_y": 0,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 2,
+    "fields": {
+      "coordinate_x": 0,
+      "coordinate_y": 1,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 3,
+    "fields": {
+      "coordinate_x": 0,
+      "coordinate_y": 2,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 4,
+    "fields": {
+      "coordinate_x": 0,
+      "coordinate_y": 3,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 5,
+    "fields": {
+      "coordinate_x": 0,
+      "coordinate_y": 4,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 6,
+    "fields": {
+      "coordinate_x": 0,
+      "coordinate_y": 5,
+      "savegame": 5,
+      "regiment": 452
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 7,
+    "fields": {
+      "coordinate_x": 0,
+      "coordinate_y": 6,
+      "savegame": 5,
+      "regiment": 453
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 8,
+    "fields": {
+      "coordinate_x": 0,
+      "coordinate_y": 7,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 9,
+    "fields": {
+      "coordinate_x": 0,
+      "coordinate_y": 8,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 10,
+    "fields": {
+      "coordinate_x": 0,
+      "coordinate_y": 9,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 11,
+    "fields": {
+      "coordinate_x": 1,
+      "coordinate_y": 0,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 12,
+    "fields": {
+      "coordinate_x": 1,
+      "coordinate_y": 1,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 13,
+    "fields": {
+      "coordinate_x": 1,
+      "coordinate_y": 2,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 14,
+    "fields": {
+      "coordinate_x": 1,
+      "coordinate_y": 3,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 15,
+    "fields": {
+      "coordinate_x": 1,
+      "coordinate_y": 4,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 16,
+    "fields": {
+      "coordinate_x": 1,
+      "coordinate_y": 5,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 17,
+    "fields": {
+      "coordinate_x": 1,
+      "coordinate_y": 6,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 18,
+    "fields": {
+      "coordinate_x": 1,
+      "coordinate_y": 7,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 19,
+    "fields": {
+      "coordinate_x": 1,
+      "coordinate_y": 8,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 20,
+    "fields": {
+      "coordinate_x": 1,
+      "coordinate_y": 9,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 21,
+    "fields": {
+      "coordinate_x": 2,
+      "coordinate_y": 0,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 22,
+    "fields": {
+      "coordinate_x": 2,
+      "coordinate_y": 1,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 23,
+    "fields": {
+      "coordinate_x": 2,
+      "coordinate_y": 2,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 24,
+    "fields": {
+      "coordinate_x": 2,
+      "coordinate_y": 3,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 25,
+    "fields": {
+      "coordinate_x": 2,
+      "coordinate_y": 4,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 26,
+    "fields": {
+      "coordinate_x": 2,
+      "coordinate_y": 5,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 27,
+    "fields": {
+      "coordinate_x": 2,
+      "coordinate_y": 6,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 28,
+    "fields": {
+      "coordinate_x": 2,
+      "coordinate_y": 7,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 29,
+    "fields": {
+      "coordinate_x": 2,
+      "coordinate_y": 8,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 30,
+    "fields": {
+      "coordinate_x": 2,
+      "coordinate_y": 9,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 31,
+    "fields": {
+      "coordinate_x": 3,
+      "coordinate_y": 0,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 32,
+    "fields": {
+      "coordinate_x": 3,
+      "coordinate_y": 1,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 33,
+    "fields": {
+      "coordinate_x": 3,
+      "coordinate_y": 2,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 34,
+    "fields": {
+      "coordinate_x": 3,
+      "coordinate_y": 3,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 35,
+    "fields": {
+      "coordinate_x": 3,
+      "coordinate_y": 4,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 36,
+    "fields": {
+      "coordinate_x": 3,
+      "coordinate_y": 5,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 37,
+    "fields": {
+      "coordinate_x": 3,
+      "coordinate_y": 6,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 38,
+    "fields": {
+      "coordinate_x": 3,
+      "coordinate_y": 7,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 39,
+    "fields": {
+      "coordinate_x": 3,
+      "coordinate_y": 8,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 40,
+    "fields": {
+      "coordinate_x": 3,
+      "coordinate_y": 9,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 41,
+    "fields": {
+      "coordinate_x": 4,
+      "coordinate_y": 0,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 42,
+    "fields": {
+      "coordinate_x": 4,
+      "coordinate_y": 1,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 43,
+    "fields": {
+      "coordinate_x": 4,
+      "coordinate_y": 2,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 44,
+    "fields": {
+      "coordinate_x": 4,
+      "coordinate_y": 3,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 45,
+    "fields": {
+      "coordinate_x": 4,
+      "coordinate_y": 4,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 46,
+    "fields": {
+      "coordinate_x": 4,
+      "coordinate_y": 5,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 47,
+    "fields": {
+      "coordinate_x": 4,
+      "coordinate_y": 6,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 48,
+    "fields": {
+      "coordinate_x": 4,
+      "coordinate_y": 7,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 49,
+    "fields": {
+      "coordinate_x": 4,
+      "coordinate_y": 8,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 50,
+    "fields": {
+      "coordinate_x": 4,
+      "coordinate_y": 9,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 51,
+    "fields": {
+      "coordinate_x": 5,
+      "coordinate_y": 0,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 52,
+    "fields": {
+      "coordinate_x": 5,
+      "coordinate_y": 1,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 53,
+    "fields": {
+      "coordinate_x": 5,
+      "coordinate_y": 2,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 54,
+    "fields": {
+      "coordinate_x": 5,
+      "coordinate_y": 3,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 55,
+    "fields": {
+      "coordinate_x": 5,
+      "coordinate_y": 4,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 56,
+    "fields": {
+      "coordinate_x": 5,
+      "coordinate_y": 5,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 57,
+    "fields": {
+      "coordinate_x": 5,
+      "coordinate_y": 6,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 58,
+    "fields": {
+      "coordinate_x": 5,
+      "coordinate_y": 7,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 59,
+    "fields": {
+      "coordinate_x": 5,
+      "coordinate_y": 8,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 60,
+    "fields": {
+      "coordinate_x": 5,
+      "coordinate_y": 9,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 61,
+    "fields": {
+      "coordinate_x": 6,
+      "coordinate_y": 0,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 62,
+    "fields": {
+      "coordinate_x": 6,
+      "coordinate_y": 1,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 63,
+    "fields": {
+      "coordinate_x": 6,
+      "coordinate_y": 2,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 64,
+    "fields": {
+      "coordinate_x": 6,
+      "coordinate_y": 3,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 65,
+    "fields": {
+      "coordinate_x": 6,
+      "coordinate_y": 4,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 66,
+    "fields": {
+      "coordinate_x": 6,
+      "coordinate_y": 5,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 67,
+    "fields": {
+      "coordinate_x": 6,
+      "coordinate_y": 6,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 68,
+    "fields": {
+      "coordinate_x": 6,
+      "coordinate_y": 7,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 69,
+    "fields": {
+      "coordinate_x": 6,
+      "coordinate_y": 8,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 70,
+    "fields": {
+      "coordinate_x": 6,
+      "coordinate_y": 9,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 71,
+    "fields": {
+      "coordinate_x": 7,
+      "coordinate_y": 0,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 72,
+    "fields": {
+      "coordinate_x": 7,
+      "coordinate_y": 1,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 73,
+    "fields": {
+      "coordinate_x": 7,
+      "coordinate_y": 2,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 74,
+    "fields": {
+      "coordinate_x": 7,
+      "coordinate_y": 3,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 75,
+    "fields": {
+      "coordinate_x": 7,
+      "coordinate_y": 4,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 76,
+    "fields": {
+      "coordinate_x": 7,
+      "coordinate_y": 5,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 77,
+    "fields": {
+      "coordinate_x": 7,
+      "coordinate_y": 6,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 78,
+    "fields": {
+      "coordinate_x": 7,
+      "coordinate_y": 7,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 79,
+    "fields": {
+      "coordinate_x": 7,
+      "coordinate_y": 8,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 80,
+    "fields": {
+      "coordinate_x": 7,
+      "coordinate_y": 9,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 81,
+    "fields": {
+      "coordinate_x": 8,
+      "coordinate_y": 0,
+      "savegame": 5,
+      "regiment": 47
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 82,
+    "fields": {
+      "coordinate_x": 8,
+      "coordinate_y": 1,
+      "savegame": 5,
+      "regiment": 48
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 83,
+    "fields": {
+      "coordinate_x": 8,
+      "coordinate_y": 2,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 84,
+    "fields": {
+      "coordinate_x": 8,
+      "coordinate_y": 3,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 85,
+    "fields": {
+      "coordinate_x": 8,
+      "coordinate_y": 4,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 86,
+    "fields": {
+      "coordinate_x": 8,
+      "coordinate_y": 5,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 87,
+    "fields": {
+      "coordinate_x": 8,
+      "coordinate_y": 6,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 88,
+    "fields": {
+      "coordinate_x": 8,
+      "coordinate_y": 7,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 89,
+    "fields": {
+      "coordinate_x": 8,
+      "coordinate_y": 8,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 90,
+    "fields": {
+      "coordinate_x": 8,
+      "coordinate_y": 9,
+      "savegame": 5,
+      "regiment": null
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 91,
+    "fields": {
+      "coordinate_x": 9,
+      "coordinate_y": 0,
+      "savegame": 5,
+      "regiment": 37
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 92,
+    "fields": {
+      "coordinate_x": 9,
+      "coordinate_y": 1,
+      "savegame": 5,
+      "regiment": 38
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 93,
+    "fields": {
+      "coordinate_x": 9,
+      "coordinate_y": 2,
+      "savegame": 5,
+      "regiment": 39
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 94,
+    "fields": {
+      "coordinate_x": 9,
+      "coordinate_y": 3,
+      "savegame": 5,
+      "regiment": 40
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 95,
+    "fields": {
+      "coordinate_x": 9,
+      "coordinate_y": 4,
+      "savegame": 5,
+      "regiment": 41
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 96,
+    "fields": {
+      "coordinate_x": 9,
+      "coordinate_y": 5,
+      "savegame": 5,
+      "regiment": 42
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 97,
+    "fields": {
+      "coordinate_x": 9,
+      "coordinate_y": 6,
+      "savegame": 5,
+      "regiment": 43
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 98,
+    "fields": {
+      "coordinate_x": 9,
+      "coordinate_y": 7,
+      "savegame": 5,
+      "regiment": 44
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 99,
+    "fields": {
+      "coordinate_x": 9,
+      "coordinate_y": 8,
+      "savegame": 5,
+      "regiment": 45
+    }
+  },
+  {
+    "model": "military.battlefieldtile",
+    "pk": 100,
+    "fields": {
+      "coordinate_x": 9,
+      "coordinate_y": 9,
+      "savegame": 5,
+      "regiment": 46
     }
   }
 ]

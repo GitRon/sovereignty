@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% load utils %}
 
 {% block content %}
@@ -12,7 +13,8 @@
                         {% if tile.regiment %}
                             <div class="battle-regiment center-align">
                                 <div>
-                                    <i class="fas fa-male" style="color: {{ tile.regiment.county.primary_color }}"></i>
+                                    <img class="regiment-type" src="{% static tile.regiment.type.icon_name %}"
+                                         alt="{{ tile.regiment.type }}" title="{{ tile.regiment.type }}" />
                                 </div>
                                 <div class="regiment-label">{{ tile.regiment.name }}</div>
                                 <div class="regiment-label">{{ tile.regiment.county }}</div>

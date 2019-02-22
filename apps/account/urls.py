@@ -9,4 +9,7 @@ urlpatterns = [
     path('menu/load/savegame/<int:savegame_id>', views.Menu.as_view(), name='menu-load-savegame-view'),
     path('finish-year', views.FinishYear.as_view(), name='finish-year-view'),
 
+    # Meta
+    path('imprint', views.ImprintView.as_view(), name='imprint-view'),
+
 ]

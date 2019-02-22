@@ -7,6 +7,17 @@
     height: 20px;
 }
 
+/* Sticky footer */
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
 /* Battle */
 
 #battlefield {
@@ -27,6 +38,10 @@
 
 .battle-regiment .regiment-label {
     font-size: 0.5em;
+}
+
+.battle-regiment img.regiment-type {
+    width: 30%;
 }
 
 /* END Battle */

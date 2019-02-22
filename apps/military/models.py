@@ -30,6 +30,7 @@ class RegimentType(models.Model):
     is_long_range = models.BooleanField()
     long_range_tile_distance = models.PositiveSmallIntegerField(null=True, blank=True)
     default_type = models.BooleanField(default=False, help_text='There can only be one default type.')
+    icon_path = models.CharField(max_length=50, null=True)
 
     def __str__(self):
         return self.name
@@ -51,7 +52,7 @@ class Regiment(models.Model):
     name = models.CharField(max_length=100)
     county = models.ForeignKey(County, related_name='regiments', on_delete=models.CASCADE)
     type = models.ForeignKey(RegimentType, related_name='regiments', on_delete=models.CASCADE)
-    upgrades = models.ManyToManyField(RegimentUpgrade, related_name='regiments')
+    upgrades = models.ManyToManyField(RegimentUpgrade, related_name='regiments', blank=True)
     current_men = models.PositiveIntegerField(default=DEFAULT_REGIMENT_SIZE)
 
     def __str__(self):
