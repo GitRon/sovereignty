@@ -7,6 +7,7 @@ from apps.account.managers import SavegameManager
 from apps.account.models import Savegame
 from apps.military.models import Regiment, RegimentType
 from apps.military.services.battlefield import BattlefieldService
+from apps.military.services.regiment_actions import RegimentActionService
 
 
 class OverviewView(generic.TemplateView):
@@ -52,5 +53,26 @@ class BattleView(generic.TemplateView):
         context['battle_data'] = bs.get_current_battlefield()
         # todo for now all your regiments are fighting
         context['my_regiments'] = savegame.current_county.regiments.all
+
+        # Constants
+        context['ba_move_left'] = RegimentActionService.ACTION_MOVE_LEFT
+        context['ba_move_right'] = RegimentActionService.ACTION_MOVE_RIGHT
+        context['ba_move_up'] = RegimentActionService.ACTION_MOVE_UP
+        context['ba_move_down'] = RegimentActionService.ACTION_MOVE_DOWN
+
         return context
+
+
+class ExecutionBattleAction(generic.TemplateView):
+
+    def dispatch(self, request, *args, **kwargs):
+        regiment = get_object_or_404(Regiment, pk=kwargs['regiment_id'])
+        action = kwargs['action']
+
+        savegame = Savegame.objects.get(pk=Savegame.objects.get_from_session(self.request))
+        ras = RegimentActionService(savegame)
+        ras.execute_action(regiment, action)
+
+        return redirect('military:battle-view')
+
 

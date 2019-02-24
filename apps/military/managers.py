@@ -6,4 +6,6 @@ class BattlefieldTileManager(SavegameBasedObjectManager):
 
 
 class BattleManager(SavegameBasedObjectManager):
-    pass
+
+    def get_current_battle(self, request=None, savegame=None):
+        return self.get_visible(request, savegame).filter(done=False).first()

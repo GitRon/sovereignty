@@ -13,8 +13,8 @@
                         {% if tile.regiment %}
                             <div class="battle-regiment center-align">
                                 <div>
-                                    <img class="regiment-type" src="{% static tile.regiment.type.icon_name %}"
-                                         alt="{{ tile.regiment.type }}" title="{{ tile.regiment.type }}" />
+                                    <img class="regiment-type" src="{% static tile.regiment.type.icon_path %}"
+                                         alt="{{ tile.regiment.type }}" title="{{ tile.regiment.type }}"/>
                                 </div>
                                 <div class="regiment-label">{{ tile.regiment.name }}</div>
                                 <div class="regiment-label">{{ tile.regiment.county }}</div>
@@ -25,6 +25,7 @@
             </div>
         </div>
         <div class="col s12 m6">
+            <h4>Round {{ battle_data.battle.round }}</h4>
             <table>
                 <tr>
                     <th>Regiment</th>
@@ -34,12 +35,29 @@
                     <tr>
                         <td>{{ regiment }}</td>
                         <td>
-                            <a class="waves-effect waves-light btn blue lighten-2"
-                               href="#">
-                                <i class="fas fa-arrow-right"></i></a>
-                            <a class="waves-effect waves-light btn blue lighten-2"
-                               href="#">
-                                <i class="fas fa-arrow-up"></i></a>
+                            {% for action in regiment.battlefield_actions %}
+                                {% if action == ba_move_left %}
+                                    <a class="waves-effect waves-light btn blue lighten-2"
+                                       href="{% url 'military:execute-battle-action-view' regiment.id action %}">
+                                        <i class="fas fa-arrow-left"></i></a>
+                                {% elif action == ba_move_right %}
+                                    <a class="waves-effect waves-light btn blue lighten-2"
+                                       href="{% url 'military:execute-battle-action-view' regiment.id action %}">
+                                        <i class="fas fa-arrow-right"></i></a>
+                                {% elif action == ba_move_up %}
+                                    <a class="waves-effect waves-light btn blue lighten-2"
+                                       href="{% url 'military:execute-battle-action-view' regiment.id action %}">
+                                        <i class="fas fa-arrow-up"></i></a>
+                                {% elif action == ba_move_down %}
+                                    <a class="waves-effect waves-light btn blue lighten-2"
+                                       href="{% url 'military:execute-battle-action-view' regiment.id action %}">
+                                        <i class="fas fa-arrow-down"></i></a>
+                                {% endif %}
+                            {% empty %}
+                                {% if regiment.turn_done %}
+                                    <span class="new badge red lighten-2" data-badge-caption="">Turn done</span>
+                                {% endif %}
+                            {% endfor %}
                         </td>
                     </tr>
                 {% endfor %}

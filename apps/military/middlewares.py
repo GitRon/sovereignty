@@ -18,6 +18,7 @@ class RedirectToActiveBattleMiddleware:
             savegame = SavegameManager.get_from_session(request)
 
             if request.path != reverse('military:battle-view') and \
+                    'military/battle/execute-action/' not in request.path and \
                     Battle.objects.get_visible(savegame=savegame).filter(done=False).exists():
                 return redirect('military:battle-view')
 

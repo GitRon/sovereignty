@@ -1,4 +1,4 @@
-from apps.military.models import BattlefieldTile, Battle
+
 
 
 class BattlefieldService(object):
@@ -6,10 +6,18 @@ class BattlefieldService(object):
 
     savegame = None
     battle = None
+    battlefield = None
 
     def __init__(self, savegame):
+        from apps.military.models import BattlefieldTile, Battle
+
         self.savegame = savegame
-        self.battle = Battle.objects.get_visible(savegame=self.savegame).filter(done=False).first()
+        self.battle = Battle.objects.get_current_battle(savegame=savegame)
+
+        if not self.battle:
+            raise Exception('No current battle found.')
+
+        self.battlefield = BattlefieldTile.objects.get_visible(savegame=self.savegame)
         self.me_attacking = self.battle.attacker == self.savegame.current_county
 
     def is_battlefield_created(self):
@@ -17,13 +25,15 @@ class BattlefieldService(object):
         Checks if battlefield has been set up
         :return:
         """
-        return BattlefieldTile.objects.get_visible(savegame=self.savegame).exists()
+        return self.battlefield.exists()
 
     def create_battlefield_tiles(self):
         """
         Create battlefield tiles for savegame
         :return:
         """
+        from apps.military.models import BattlefieldTile
+
         for x in range(0, BattlefieldService.BATTLEFIELD_SIZE):
             for y in range(0, BattlefieldService.BATTLEFIELD_SIZE):
                 BattlefieldTile.objects.get_or_create(
@@ -34,6 +44,8 @@ class BattlefieldService(object):
 
     def get_current_battlefield(self):
 
+        from apps.military.models import Battle
+
         if not self.battle:
             return False
 
@@ -42,15 +54,31 @@ class BattlefieldService(object):
 
         data = {
             'battle': self.battle,
-            'battlefield_tiles': BattlefieldTile.objects.get_visible(savegame=self.savegame)
+            'battlefield_tiles': self.battlefield
         }
 
         return data
 
+    def get_tile(self, x, y):
+        qs = self.battlefield.filter(coordinate_x=x, coordinate_y=y).first()
+        if not qs:
+            raise Exception(f'Queried invalid battlefied tile {x}/{y}.')
+        return qs
+
     def initialize_battle(self):
 
+        from apps.military.models import BattlefieldTile
+
+        # Check if battlefield setup is correct
+        if not self.is_battlefield_created():
+            raise Exception('Battlefield tile setup not complete')
+
         # Clear battlefield
-        BattlefieldTile.objects.get_visible(savegame=self.savegame).update(regiment=None)
+        self.battlefield.update(regiment=None)
+
+        # Reset round action for all regiments
+        self.battle.attacker.regiments.all().update(last_action_in_round=0)
+        self.battle.defender.regiments.all().update(last_action_in_round=0)
 
         # Position troops
         # todo for now all armies of a country are fighting
@@ -83,7 +111,8 @@ class BattlefieldService(object):
             ]
 
         for army in armies:
-            first_position = int(self.BATTLEFIELD_SIZE / army['regiments'].count())
+            # todo build a test for this! kind of fragile...
+            first_position = int((self.BATTLEFIELD_SIZE - 1) / army['regiments'].count())
 
             counter = 0
             for regiment in army['regiments']:
@@ -111,3 +140,16 @@ class BattlefieldService(object):
                     counter = 0
 
         print('Battlefield setup.')
+
+    def move_regiment(self, regiment, x: int, y: int):
+
+        # Check if tile is taken
+        if self.battlefield.filter(coordinate_x=x, coordinate_y=y, regiment__isnull=False) \
+                .exclude(regiment=regiment).exists():
+            raise Exception(f'Cannot move regiment to coordinates {x}/{y} because tile is already taken.')
+
+        # Remove regiment from previous tile
+        self.battlefield.filter(regiment=regiment).update(regiment=None)
+
+        # Set regiment to new tile
+        self.battlefield.filter(coordinate_x=x, coordinate_y=y).update(regiment=regiment)
