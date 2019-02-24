@@ -7,9 +7,10 @@
         <div class="col s12 m6">
             <div id="battlefield">
                 {% for tile in battle_data.battlefield_tiles %}
-                    <div class="battle-tile"
+                    <div class="battle-tile {% if tile.coordinate_x|add:tile.coordinate_y|divisibleby:2 %}dark grey lighten-2{% endif %}"
                          style="left: {{ tile.coordinate_x|multiply:4 }}em; top: {{ tile.coordinate_y|multiply:4 }}em">
                         <div class="battle-tile-info">{{ tile.coordinate_x }}/{{ tile.coordinate_y }}</div>
+                        <div class="men-info">{{ tile.regiment.current_men }}</div>
                         {% if tile.regiment %}
                             <div class="battle-regiment center-align">
                                 <div>

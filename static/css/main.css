@@ -25,13 +25,27 @@ main {
 }
 
 .battle-tile {
-    border: 1px solid grey;
+    /*border: 1px solid grey;*/
     position: absolute;
     height: 4em;
     width: 4em;
+    padding-top: 0.5em;
 }
 
 .battle-tile-info {
+    position: absolute;
+    left: 0.2em;
+    top: 0;
+    font-size: 0.5em;
+    color: lightgray;
+}
+.battle-tile.dark .battle-tile-info, .battle-tile.dark .men-info {
+    color: white;
+}
+.men-info {
+    position: absolute;
+    right: 0.2em;
+    top: 0;
     font-size: 0.5em;
     color: lightgray;
 }
