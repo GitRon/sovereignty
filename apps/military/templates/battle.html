@@ -13,7 +13,8 @@
                         <div class="men-info">{{ tile.regiment.current_men }}</div>
                         {% if tile.regiment %}
                             <div class="battle-regiment center-align">
-                                <div>
+                                <div class="regiment-image-box"
+                                     style="background-color: {{ tile.regiment.county.primary_color }}">
                                     <img class="regiment-type" src="{% static tile.regiment.type.icon_path %}"
                                          alt="{{ tile.regiment.type }}" title="{{ tile.regiment.type }}"/>
                                 </div>
@@ -24,45 +25,33 @@
                     </div>
                 {% endfor %}
             </div>
+            <div class="clearfix"></div>
         </div>
         <div class="col s12 m6">
             <h4>Round {{ battle_data.battle.round }}</h4>
-            <table>
-                <tr>
-                    <th>Regiment</th>
-                    <th>Actions</th>
-                </tr>
-                {% for regiment in my_regiments %}
-                    <tr>
-                        <td>{{ regiment }}</td>
-                        <td>
-                            {% for action in regiment.battlefield_actions %}
-                                {% if action == ba_move_left %}
-                                    <a class="waves-effect waves-light btn blue lighten-2"
-                                       href="{% url 'military:execute-battle-action-view' regiment.id action %}">
-                                        <i class="fas fa-arrow-left"></i></a>
-                                {% elif action == ba_move_right %}
-                                    <a class="waves-effect waves-light btn blue lighten-2"
-                                       href="{% url 'military:execute-battle-action-view' regiment.id action %}">
-                                        <i class="fas fa-arrow-right"></i></a>
-                                {% elif action == ba_move_up %}
-                                    <a class="waves-effect waves-light btn blue lighten-2"
-                                       href="{% url 'military:execute-battle-action-view' regiment.id action %}">
-                                        <i class="fas fa-arrow-up"></i></a>
-                                {% elif action == ba_move_down %}
-                                    <a class="waves-effect waves-light btn blue lighten-2"
-                                       href="{% url 'military:execute-battle-action-view' regiment.id action %}">
-                                        <i class="fas fa-arrow-down"></i></a>
-                                {% endif %}
-                            {% empty %}
-                                {% if regiment.turn_done %}
-                                    <span class="new badge red lighten-2" data-badge-caption="">Turn done</span>
-                                {% endif %}
-                            {% endfor %}
-                        </td>
-                    </tr>
-                {% endfor %}
-            </table>
+            <ul class="tabs">
+                <li class="tab col s3"><a class="active" href="#my-regiments">Troops</a></li>
+                <li class="tab col s3"><a href="#opposing-regiments">Opponent</a></li>
+                <li class="tab col s3"><a href="#battle-log">Battle log</a></li>
+            </ul>
+            <div id="my-regiments">
+                {% include 'partials/_regiment_table.html' with regiment_list=my_regiments show_actions=True %}
+            </div>
+            <div id="opposing-regiments">
+                {% include 'partials/_regiment_table.html' with regiment_list=opposing_regiments show_actions=False %}
+            </div>
+            <div id="battle-log">
+                <div>
+                    {% for log in battle_data.battle.logs.all %}
+                        <div>{{ log }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="spacer"></div>
+            <div>
+                <a class="btn " href="{% url 'military:battle-finish-round-view' %}">Finish round</a>
+            </div>
+
         </div>
     </div>
 {% endblock %}

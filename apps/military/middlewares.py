@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.shortcuts import redirect
 from django.urls import reverse
 
@@ -17,9 +18,10 @@ class RedirectToActiveBattleMiddleware:
         if '/admin/' not in request.path:
             savegame = SavegameManager.get_from_session(request)
 
-            if request.path != reverse('military:battle-view') and \
-                    'military/battle/execute-action/' not in request.path and \
+            if savegame and request.path != reverse('military:battle-view') and \
+                    'military/battle/' not in request.path and \
                     Battle.objects.get_visible(savegame=savegame).filter(done=False).exists():
+                messages.add_message(request, messages.INFO, 'Please finish the battle first.')
                 return redirect('military:battle-view')
 
         response = self.get_response(request)

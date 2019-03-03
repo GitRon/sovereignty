@@ -1,0 +1,67 @@
+{% load static %}
+<table>
+    <tr>
+        <th>Regiment</th>
+        <th>Type</th>
+        <th>Men</th>
+        <th>Morale</th>
+        {% if show_actions %}
+            <th>Actions</th>
+        {% endif %}
+    </tr>
+    {% for regiment in regiment_list %}
+        <tr>
+            <td>{{ regiment }}</td>
+            <td><img class="regiment-type preview" src="{% static regiment.type.icon_path %}"
+                     alt="{{ regiment.type }}" title="{{ regiment.type }}"/></td>
+            <td>{{ regiment.current_men }}</td>
+            <td>{{ regiment.current_morale }}</td>
+            {% if show_actions %}
+                <td>
+                    {% for action in regiment.battlefield_actions %}
+                        {% if action == ba_move_left %}
+                            <a class="waves-effect waves-light btn blue lighten-2"
+                               href="{% url 'military:execute-battle-action-view' regiment.id action %}">
+                                <i class="fas fa-arrow-left"></i>&nbsp;<i
+                                    class="fas fa-shoe-prints"></i></a>
+                        {% elif action == ba_move_right %}
+                            <a class="waves-effect waves-light btn blue lighten-2"
+                               href="{% url 'military:execute-battle-action-view' regiment.id action %}">
+                                <i class="fas fa-shoe-prints"></i>&nbsp;<i
+                                    class="fas fa-arrow-right"></i></a>
+                        {% elif action == ba_move_up %}
+                            <a class="waves-effect waves-light btn blue lighten-2"
+                               href="{% url 'military:execute-battle-action-view' regiment.id action %}">
+                                <i class="fas fa-arrow-up"></i>&nbsp;<i class="fas fa-shoe-prints"></i></a>
+                        {% elif action == ba_move_down %}
+                            <a class="waves-effect waves-light btn blue lighten-2"
+                               href="{% url 'military:execute-battle-action-view' regiment.id action %}">
+                                <i class="fas fa-shoe-prints"></i>&nbsp;<i
+                                    class="fas fa-arrow-down"></i></a>
+                        {% elif action == ba_melee %}
+                            <a class="waves-effect waves-light btn blue lighten-2"
+                               href="{% url 'military:execute-battle-action-view' regiment.id action %}">
+                                <img class="battle-action" alt="melee"
+                                     src="{% static 'img/flaticon/freepik/melee-white.svg' %}"/>
+                            </a>
+                        {% elif action == ba_long_range %}
+                            <a class="waves-effect waves-light btn blue lighten-2"
+                               href="{% url 'military:execute-battle-action-view' regiment.id action %}">
+                                <img class="battle-action" alt="long-range"
+                                     src="{% static 'img/flaticon/freepik/arrows-white.svg' %}"/>
+                            </a>
+                        {% endif %}
+                    {% empty %}
+                        {% if not regiment.on_battlefield %}
+                            <span class="new badge purple lighten-3" data-badge-caption="">Gone</span>
+                        {% elif regiment.is_fleeing %}
+                            <span class="new badge red lighten-2" data-badge-caption="">Fleeing!</span>
+                        {% elif regiment.turn_done %}
+                            <span class="new badge orange lighten-2" data-badge-caption="">Turn done</span>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            {% endif %}
+        </tr>
+    {% endfor %}
+</table>

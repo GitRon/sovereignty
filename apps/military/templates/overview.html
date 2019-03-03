@@ -12,7 +12,7 @@
                     <th>Costs</th>
                     <th></th>
                 </tr>
-                {% for regiment in savegame.playing_as.home_county.regiments.all %}
+                {% for regiment in savegame.current_county.regiments.all %}
                     <tr>
                         <td>{{ regiment.name }}</td>
                         <td>{{ regiment.type }}</td>

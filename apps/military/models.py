@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 from apps.location.models import County
 from apps.military.managers import BattleManager, BattlefieldTileManager
@@ -10,7 +12,10 @@ class Battle(models.Model):
     done = models.BooleanField(default=False)
     round = models.PositiveIntegerField(default=1)
     attacker = models.ForeignKey(County, related_name='attacker_in_battles', on_delete=models.CASCADE)
+    attacker_regiments = models.ManyToManyField("Regiment", related_name='attacker_in_battles')
     defender = models.ForeignKey(County, related_name='defender_in_battles', on_delete=models.CASCADE)
+    defender_regiments = models.ManyToManyField("Regiment", related_name='defender_in_battles')
+    # todo do i need this or can i extend the battle log to get the value from there?
     losses_attacker = models.PositiveIntegerField(default=0)
     losses_defender = models.PositiveIntegerField(default=0)
 
@@ -22,6 +27,17 @@ class Battle(models.Model):
         return f'{self.year} - {self.attacker} vs {self.defender}'
 
 
+class BattleLogEntry(models.Model):
+    battle = models.ForeignKey(Battle, related_name='logs', on_delete=models.CASCADE)
+    text = models.TextField()
+
+    class Meta:
+        ordering = ['-id']
+
+    def __str__(self):
+        return self.text
+
+
 class RegimentType(models.Model):
     name = models.CharField(max_length=75)
     attack_value = models.PositiveSmallIntegerField()
@@ -30,7 +46,6 @@ class RegimentType(models.Model):
     morale = models.PositiveSmallIntegerField()
     steps_per_turn = models.PositiveSmallIntegerField()
     is_long_range = models.BooleanField()
-    long_range_tile_distance = models.PositiveSmallIntegerField(null=True, blank=True)
     default_type = models.BooleanField(default=False, help_text='There can only be one default type.')
     icon_path = models.CharField(max_length=50, null=True)
 
@@ -50,12 +65,14 @@ class RegimentUpgrade(models.Model):
 
 class Regiment(models.Model):
     DEFAULT_REGIMENT_SIZE = 100
+    BORDER_MORALE = 10
 
     name = models.CharField(max_length=100)
     county = models.ForeignKey(County, related_name='regiments', on_delete=models.CASCADE)
     type = models.ForeignKey(RegimentType, related_name='regiments', on_delete=models.CASCADE)
     upgrades = models.ManyToManyField(RegimentUpgrade, related_name='regiments', blank=True)
     current_men = models.PositiveIntegerField(default=DEFAULT_REGIMENT_SIZE)
+    current_morale = models.SmallIntegerField(default=0)
 
     last_action_in_round = models.PositiveIntegerField(default=0)
 
@@ -67,8 +84,12 @@ class Regiment(models.Model):
         ras = RegimentActionService(self.county.savegame)
         available_actions = []
 
-        if not self.turn_done:
+        if not (self.turn_done or self.is_fleeing):
+            # Movement
             available_actions += ras.det_basic_movement(self)
+            # Fighting
+            available_actions += ras.det_fight_melee(self)
+            available_actions += ras.det_fight_long_range(self)
 
         return available_actions
 
@@ -76,6 +97,27 @@ class Regiment(models.Model):
     def turn_done(self):
         current_battle = Battle.objects.get_current_battle(savegame=self.county.savegame)
         return True if current_battle.round <= self.last_action_in_round else False
+
+    @property
+    def is_fleeing(self):
+        return self.current_morale < self.BORDER_MORALE
+
+    @property
+    def on_battlefield(self):
+        return self.on_battlefield_tile
+
+    def get_position(self):
+        if self.on_battlefield_tile:
+            x = self.on_battlefield_tile.coordinate_x
+            y = self.on_battlefield_tile.coordinate_y
+            return x, y
+
+
+@receiver(post_save, sender=Regiment, dispatch_uid="regiment.set_initial_morale_from_type")
+def set_initial_morale_from_type(sender, instance, created, **kwargs):
+    if created:
+        instance.morale = instance.type.morale
+        instance.save()
 
 
 class BattlefieldTile(models.Model):

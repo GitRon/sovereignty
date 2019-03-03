@@ -12,5 +12,6 @@ urlpatterns = [
     path('battle/current', views.BattleView.as_view(), name='battle-view'),
     path('battle/execute-action/<int:regiment_id>/<int:action>', views.ExecutionBattleAction.as_view(),
          name='execute-battle-action-view'),
+    path('battle/finish-round', views.BattleFinishRoundView.as_view(), name='battle-finish-round-view'),
 
 ]

@@ -7,6 +7,10 @@
     height: 20px;
 }
 
+.spacer {
+    margin: 1em 0;
+}
+
 /* Sticky footer */
 body {
     display: flex;
@@ -55,7 +59,22 @@ main {
 }
 
 .battle-regiment img.regiment-type {
-    width: 30%;
+    width: 50%;
+}
+
+.battle-regiment .regiment-image-box {
+    margin: 0 1em;
+    border-radius: 0.5em;
+    opacity: 0.7;
+}
+
+img.battle-action {
+    width: 1.4em;
+    padding-top: 0.5em;
+}
+
+img.regiment-type.preview {
+    width: 2em;
 }
 
 /* END Battle */

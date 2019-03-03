@@ -5,8 +5,9 @@ from django.views import generic
 
 from apps.account.managers import SavegameManager
 from apps.account.models import Savegame
-from apps.military.models import Regiment, RegimentType
+from apps.military.models import Regiment, RegimentType, Battle
 from apps.military.services.battlefield import BattlefieldService
+from apps.military.services.ki import KiService
 from apps.military.services.regiment_actions import RegimentActionService
 
 
@@ -51,14 +52,21 @@ class BattleView(generic.TemplateView):
         savegame = Savegame.objects.get(pk=Savegame.objects.get_from_session(self.request))
         bs = BattlefieldService(savegame)
         context['battle_data'] = bs.get_current_battlefield()
-        # todo for now all your regiments are fighting
-        context['my_regiments'] = savegame.current_county.regiments.all
+
+        context['my_regiments'] = bs.battle.attacker_regiments.all() \
+            if bs.battle.attacker == savegame.current_county else bs.battle.defender_regiments.all()
+        context['opposing_regiments'] = bs.battle.attacker_regiments.all() \
+            if bs.battle.attacker != savegame.current_county else bs.battle.defender_regiments.all()
+
+        context['opposing_regiments'] = context['opposing_regiments'].filter(on_battlefield_tile__isnull=False)
 
         # Constants
         context['ba_move_left'] = RegimentActionService.ACTION_MOVE_LEFT
         context['ba_move_right'] = RegimentActionService.ACTION_MOVE_RIGHT
         context['ba_move_up'] = RegimentActionService.ACTION_MOVE_UP
         context['ba_move_down'] = RegimentActionService.ACTION_MOVE_DOWN
+        context['ba_melee'] = RegimentActionService.ACTION_MELEE
+        context['ba_long_range'] = RegimentActionService.ACTION_LONG_RANGE
 
         return context
 
@@ -76,3 +84,30 @@ class ExecutionBattleAction(generic.TemplateView):
         return redirect('military:battle-view')
 
 
+class BattleFinishRoundView(generic.TemplateView):
+
+    def dispatch(self, request, *args, **kwargs):
+
+        # Set new round
+        battle = Battle.objects.get_current_battle(self.request)
+        battle.round += 1
+        battle.save()
+
+        # Services
+        bs = BattlefieldService(battle.savegame)
+
+        # Mark all regiments as 'turn done' for last round
+        Regiment.objects.filter(on_battlefield_tile__savegame=battle.savegame).update(
+            last_action_in_round=battle.round - 1)
+
+        # Process fleeing units
+        kis = KiService(battle.savegame)
+        kis.process_fleeing_regiments()
+
+        # todo process enemy movement
+
+        # Check if battle is over
+        # todo
+        # bs.check_if_battle_is_won()
+
+        return redirect('military:battle-view')

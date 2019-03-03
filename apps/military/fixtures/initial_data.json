@@ -10,7 +10,6 @@
       "morale": 30,
       "steps_per_turn": 1,
       "is_long_range": false,
-      "long_range_tile_distance": null,
       "default_type": true,
       "icon_path": "img/flaticon/freepik/scythe-and-trident.svg"
     }
@@ -26,7 +25,6 @@
       "morale": 40,
       "steps_per_turn": 1,
       "is_long_range": false,
-      "long_range_tile_distance": null,
       "default_type": false,
       "icon_path": "img/flaticon/freepik/spear.svg"
     }
@@ -36,13 +34,12 @@
     "pk": 3,
     "fields": {
       "name": "Crossbowmen",
-      "attack_value": 3,
+      "attack_value": 2,
       "defense_value": 0,
       "costs": 1,
       "morale": 30,
       "steps_per_turn": 1,
       "is_long_range": true,
-      "long_range_tile_distance": 1,
       "default_type": false,
       "icon_path": "img/flaticon/freepik/crossbow.svg"
     }
@@ -58,7 +55,6 @@
       "morale": 50,
       "steps_per_turn": 1,
       "is_long_range": true,
-      "long_range_tile_distance": 2,
       "default_type": false,
       "icon_path": "img/flaticon/freepik/bow.svg"
     }
@@ -74,7 +70,6 @@
       "morale": 50,
       "steps_per_turn": 2,
       "is_long_range": false,
-      "long_range_tile_distance": null,
       "default_type": false,
       "icon_path": "img/flaticon/freepik/light-horse.svg"
     }
@@ -90,7 +85,6 @@
       "morale": 70,
       "steps_per_turn": 1,
       "is_long_range": false,
-      "long_range_tile_distance": null,
       "default_type": false,
       "icon_path": "img/flaticon/freepik/heavy-infantry.svg"
     }
@@ -106,7 +100,6 @@
       "morale": 100,
       "steps_per_turn": 1,
       "is_long_range": false,
-      "long_range_tile_distance": null,
       "default_type": false,
       "icon_path": "img/flaticon/freepik/knight.svg"
     }
