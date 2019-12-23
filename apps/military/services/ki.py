@@ -12,7 +12,12 @@ class KiService(object):
         self.battle = Battle.objects.get_current_battle(savegame=savegame)
         self.bs = BattlefieldService(self.savegame)
 
+
+    # todo logic for different unit types
+
     def _move_fleeing_regiment(self, regiment, movement_on_x: int):
+        # todo write fct which calculates best route to target tile
+        # todo what if way is blocked?
         if regiment.is_fleeing:
             regiment_coordinate_x = regiment.on_battlefield_tile.coordinate_x
             # Move one tile on the x-axes towards the starting side

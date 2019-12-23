@@ -68,7 +68,7 @@
       "defense_value": 1,
       "costs": 3,
       "morale": 50,
-      "steps_per_turn": 2,
+      "steps_per_turn": 3,
       "is_long_range": false,
       "default_type": false,
       "icon_path": "img/flaticon/freepik/light-horse.svg"
@@ -98,7 +98,7 @@
       "defense_value": 3,
       "costs": 0,
       "morale": 100,
-      "steps_per_turn": 1,
+      "steps_per_turn": 2,
       "is_long_range": false,
       "default_type": false,
       "icon_path": "img/flaticon/freepik/knight.svg"

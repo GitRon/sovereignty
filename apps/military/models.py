@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
 from apps.location.models import County
@@ -80,6 +80,20 @@ class Regiment(models.Model):
         return f'{self.name} of {self.county}'
 
     @property
+    def attack_value(self):
+        attack_value = self.type.attack_value
+        for upgrade in self.upgrades.all():
+            attack_value += upgrade.bonus_attack
+        return attack_value
+
+    @property
+    def defense_value(self):
+        defense_value = self.type.defense_value
+        for upgrade in self.upgrades.all():
+            defense_value += upgrade.bonus_attack
+        return defense_value
+
+    @property
     def battlefield_actions(self):
         ras = RegimentActionService(self.county.savegame)
         available_actions = []
@@ -106,6 +120,10 @@ class Regiment(models.Model):
     def on_battlefield(self):
         return self.on_battlefield_tile
 
+    @property
+    def lineup_weight(self):
+        return pow((self.defense_value * 0.1 + self.attack_value) * pow(self.type.steps_per_turn, 0.25), -1)
+
     def get_position(self):
         if self.on_battlefield_tile:
             x = self.on_battlefield_tile.coordinate_x
@@ -127,6 +145,10 @@ class BattlefieldTile(models.Model):
 
     regiment = models.OneToOneField(Regiment, null=True, blank=True, related_name='on_battlefield_tile',
                                     on_delete=models.SET_NULL)
+    distance_weight_attacker = models.FloatField('Distance weight', default=0,
+                                             help_text='Weighted distance on attacker side')
+    distance_weight_defender = models.FloatField('Distance weight', default=0,
+                                             help_text='Weighted distance on defender side')
 
     objects = BattlefieldTileManager()
 
@@ -148,3 +170,19 @@ class BattlefieldTile(models.Model):
     @property
     def down_neighbour(self):
         return self.coordinate_x, self.coordinate_y + 1
+
+    def _calculate_distance_weight_attacker(self):
+        from apps.military.services.battlefield import BattlefieldService
+        return abs(((BattlefieldService.BATTLEFIELD_SIZE - 1) / 2) - self.coordinate_y) + pow(self.coordinate_x, 2)
+
+    def _calculate_distance_weight_defender(self):
+        from apps.military.services.battlefield import BattlefieldService
+        return abs(((BattlefieldService.BATTLEFIELD_SIZE - 1) / 2) - self.coordinate_y) + \
+               pow(BattlefieldService.BATTLEFIELD_SIZE - 1 - self.coordinate_x, 2)
+
+
+@receiver(pre_save, sender=BattlefieldTile, dispatch_uid="battlefieldtile.set_base_distance_weight")
+def set_base_distance_weight(sender, instance, **kwargs):
+    if not instance.distance_weight_attacker:
+        instance.distance_weight_attacker = instance._calculate_distance_weight_attacker()
+        instance.distance_weight_defender = instance._calculate_distance_weight_defender()

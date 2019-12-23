@@ -1,3 +1,4 @@
+from django.db.models import Q
 
 
 class BattlefieldService(object):
@@ -84,11 +85,45 @@ class BattlefieldService(object):
 
         return neighbour_tiles.filter(regiment__isnull=False).exclude(regiment__county=regiment.county)
 
+    def get_neighbours_in_direct_plus_range(self, x: int, y: int):
+        """
+        Get all direct neighbours which are not on a diagonal field (plus-shaped area)
+        """
+        return self.battlefield.filter(Q(coordinate_x=x - 1, coordinate_y=y) |
+                                       Q(coordinate_x=x + 1, coordinate_y=y) |
+                                       Q(coordinate_x=x, coordinate_y=y - 1) |
+                                       Q(coordinate_x=x, coordinate_y=y + 1))
+
+    def get_enemies_in_direct_plus_range(self, regiment):
+        """
+        Returns all tiles where an enemy stands in the plus-shaped area around `regiment`
+        """
+        x, y = regiment.get_position()
+        neighbour_tiles = self.get_neighbours_in_direct_plus_range(x, y)
+
+        return neighbour_tiles.filter(regiment__isnull=False).exclude(regiment__county=regiment.county)
+
     def get_enemies_in_shooting_range(self, regiment):
         """
         Finds all tiles with enemies on them which can be shot at with a crossbow or bow
         """
         return self.get_enemies_in_distance(regiment, 2).exclude(id__in=self.get_enemies_in_distance(regiment))
+
+    def _lineup_troops(self, regiment_list, distance_weight_attribute):
+        # todo write test
+        from apps.military.models import BattlefieldTile
+
+        weighted_regiment_list = []
+        for regiment in regiment_list:
+            weighted_regiment_list.append({'regiment': regiment, 'weight': regiment.lineup_weight})
+
+        weighted_regiment_list = sorted(weighted_regiment_list, key=lambda k: k['weight'])
+
+        for data in weighted_regiment_list:
+            tile = BattlefieldTile.objects.get_visible(savegame=self.savegame).filter(regiment__isnull=True) \
+                .order_by(distance_weight_attribute).first()
+            tile.regiment = data['regiment']
+            tile.save()
 
     def initialize_battle(self, attacking_regiments, defending_regiments):
 
@@ -110,48 +145,9 @@ class BattlefieldService(object):
         attacking_regiments.update(last_action_in_round=0)
         defending_regiments.update(last_action_in_round=0)
 
-        # Position troops
-        armies = [
-            {
-                'x': 0,
-                'regiments': attacking_regiments,
-                'role': 'attacker'
-            },
-            {
-                'x': BattlefieldService.BATTLEFIELD_SIZE - 1,
-                'regiments': defending_regiments,
-                'role': 'defender'
-            }
-        ]
-
-        for army in armies:
-            # todo build a test for this! kind of fragile...
-            first_position = int((self.BATTLEFIELD_SIZE - 1) / army['regiments'].count())
-
-            counter = 0
-            for regiment in army['regiments']:
-                tile = None
-                tile_counter = 0
-                y = first_position + counter
-                while not tile:
-                    if self.me_attacking and army['role'] == 'attacker':
-                        x = army['x'] + tile_counter
-                    else:
-                        x = army['x'] - tile_counter
-
-                    tile = BattlefieldTile.objects.get_visible(
-                        savegame=self.savegame).filter(coordinate_x=x,
-                                                       coordinate_y=y).exclude(regiment__isnull=False).first()
-
-                    tile_counter += 1
-
-                tile.regiment = regiment
-                tile.save()
-
-                if counter < BattlefieldService.BATTLEFIELD_SIZE - 1:
-                    counter += 1
-                else:
-                    counter = 0
+        # Line up troops
+        self._lineup_troops(attacking_regiments, 'distance_weight_attacker')
+        self._lineup_troops(defending_regiments, 'distance_weight_defender')
 
         print('Battlefield setup.')
 

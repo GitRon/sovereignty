@@ -18,6 +18,8 @@
             <td>{{ regiment.current_morale }}</td>
             {% if show_actions %}
                 <td>
+                <div class="row">
+                    <div class="col s4">
                     {% for action in regiment.battlefield_actions %}
                         {% if action == ba_move_left %}
                             <a class="waves-effect waves-light btn blue lighten-2"
@@ -60,6 +62,8 @@
                             <span class="new badge orange lighten-2" data-badge-caption="">Turn done</span>
                         {% endif %}
                     {% endfor %}
+                    </div>
+                </div>
                 </td>
             {% endif %}
         </tr>

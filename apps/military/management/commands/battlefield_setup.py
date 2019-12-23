@@ -22,6 +22,7 @@ class Command(BaseCommand):
         defending_regiments = defender.regiments.all()
 
         bs = BattlefieldService(savegame)
+        bs.battle.round = 1
         bs.battle.attacker = attacker
         bs.battle.defender = defender
         bs.initialize_battle(attacking_regiments, defending_regiments)

@@ -105,6 +105,7 @@ class RegimentActionService(object):
         # TODO morale can go up as well
         # TODO build functions for calculating men, morale etc.
         # TODO moral check before any action is required
+        # TODO remove regiment if it has 0 men
         # TODO write tests
         """
         from apps.military.models import BattleLogEntry
@@ -112,19 +113,23 @@ class RegimentActionService(object):
         # Variables
         losses_attacker = losses_defender = 0
 
+        # No targets
+        qty_targets = target_list.count()
+
         # If attacker has multiple targets, for each enemy the attack value is reduced
-        corrected_attack_value = attacker.type.attack_value / target_list.count()
+        corrected_attack_value = attacker.attack_value / qty_targets
 
         for tile in target_list:
             target = tile.regiment
             dice_roll_attack = max(random.gauss(5, 5), 0)
 
             # If defender is flanked by multiple targets, defense value is reduced
-            flanking_opponents = self.battle_service.get_enemies_in_distance(target)
-            target_corrected_defense_value = target.type.defense_value / max(flanking_opponents.count() - 1, 1)
+            flanking_opponents = self.battle_service.get_enemies_in_direct_plus_range(target)
+            target_corrected_defense_value = target.defense_value / max(flanking_opponents.count() - 1, 1)
 
             # Effect on target
             killed_target_men = round((corrected_attack_value / target_corrected_defense_value) * 10 * dice_roll_attack)
+            # todo morale must be affected by result of melee fight
             lost_target_morale = round(pow(dice_roll_attack, 2) / 2)
             target.current_men -= min(max(killed_target_men, 0), target.current_men)
             target.current_morale -= lost_target_morale
@@ -134,10 +139,13 @@ class RegimentActionService(object):
 
             # Effect on attacker
             dice_roll_defense = max(random.gauss(5, 5), 0)
-            target_corrected_attack_value = target.type.attack_value / flanking_opponents.count()
-            killed_attacker_men = round((corrected_attack_value / target_corrected_attack_value) * 2 * dice_roll_defense)
-            lost_attacker_morale = round(pow(dice_roll_defense, 2) / 2)
-            attacker.current_men -= min(max(killed_attacker_men, 0), target.current_men)
+            target_corrected_attack_value = target.attack_value / flanking_opponents.count()
+            killed_attacker_men = \
+                round((corrected_attack_value / target_corrected_attack_value) * 2 * dice_roll_defense)
+            # todo morale must be affected by result of melee fight
+            # Divide killed people and morale effect by quantity of enemies which are fought against
+            lost_attacker_morale = round(pow(dice_roll_defense, 2) / 2) / qty_targets
+            attacker.current_men -= min(max(killed_attacker_men, 0), target.current_men) / qty_targets
             attacker.current_morale -= lost_attacker_morale
             attacker.save()
 
@@ -145,7 +153,7 @@ class RegimentActionService(object):
 
             BattleLogEntry.objects.create(
                 battle=self.battle,
-                text=f'{attacker} attacked {target} with {round(corrected_attack_value, 2)} of their men. '
+                text=f'{attacker} attacked {target} with {round(corrected_attack_value, 2)*100}% of their men. '
                 f'They killed {killed_target_men} men and lost {killed_attacker_men}.')
 
         self.battle.losses_attacker = losses_attacker
@@ -153,7 +161,7 @@ class RegimentActionService(object):
         self.battle.save()
 
     def _execute_melee(self, regiment):
-        enemies = self.battle_service.get_enemies_in_distance(regiment)
+        enemies = self.battle_service.get_enemies_in_direct_plus_range(regiment)
         self.calculate_melee_damage(regiment, enemies)
         # todo
 
@@ -164,7 +172,7 @@ class RegimentActionService(object):
             return []
 
         # If a tile exists where there is a regiment from the other side...
-        tiles_with_enemies = self.battle_service.get_enemies_in_distance(regiment)
+        tiles_with_enemies = self.battle_service.get_enemies_in_direct_plus_range(regiment)
         if not tiles_with_enemies.exists():
             return []
 
