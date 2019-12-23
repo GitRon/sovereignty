@@ -25,7 +25,6 @@
                     </div>
                 {% endfor %}
             </div>
-            <div class="clearfix"></div>
         </div>
         <div class="col s12 m6">
             <h4>Round {{ battle_data.battle.round }}</h4>
@@ -51,7 +50,6 @@
             <div>
                 <a class="btn " href="{% url 'military:battle-finish-round-view' %}">Finish round</a>
             </div>
-
         </div>
     </div>
 {% endblock %}

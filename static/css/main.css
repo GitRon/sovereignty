@@ -26,6 +26,7 @@ main {
 
 #battlefield {
     position: relative;
+    height: 600px;
 }
 
 .battle-tile {

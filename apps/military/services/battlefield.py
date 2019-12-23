@@ -103,6 +103,15 @@ class BattlefieldService(object):
 
         return neighbour_tiles.filter(regiment__isnull=False).exclude(regiment__county=regiment.county)
 
+    def get_allies_in_direct_plus_range(self, regiment):
+        """
+        Returns all tiles where an ally stands in the plus-shaped area around `regiment`
+        """
+        x, y = regiment.get_position()
+        neighbour_tiles = self.get_neighbours_in_direct_plus_range(x, y)
+
+        return neighbour_tiles.filter(regiment__isnull=False, regiment__county=regiment.county)
+
     def get_enemies_in_shooting_range(self, regiment):
         """
         Finds all tiles with enemies on them which can be shot at with a crossbow or bow
@@ -163,3 +172,20 @@ class BattlefieldService(object):
 
         # Set regiment to new tile
         self.battlefield.filter(coordinate_x=x, coordinate_y=y).update(regiment=regiment)
+
+    def switch_regiments(self, regiment_active, x: int, y: int):
+
+        target_tile = self.battlefield.filter(coordinate_x=x, coordinate_y=y, regiment__isnull=False).first()
+
+        # Check if tile is taken
+        if not self.battlefield.filter(regiment=regiment_active).exists() or not target_tile:
+            raise Exception(f'Cannot switch regiments because they are not both on the battlefield.')
+
+        regiment_passive = target_tile.regiment
+
+        # Remove regiment from previous tile
+        self.battlefield.filter(regiment=regiment_passive).update(regiment=None)
+        self.battlefield.filter(regiment=regiment_active).update(regiment=regiment_passive)
+
+        # Set regiment to new tile
+        self.battlefield.filter(coordinate_x=x, coordinate_y=y).update(regiment=regiment_active)

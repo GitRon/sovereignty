@@ -101,6 +101,7 @@ class Regiment(models.Model):
         if not (self.turn_done or self.is_fleeing):
             # Movement
             available_actions += ras.det_basic_movement(self)
+            available_actions += ras.det_switch(self)
             # Fighting
             available_actions += ras.det_fight_melee(self)
             available_actions += ras.det_fight_long_range(self)

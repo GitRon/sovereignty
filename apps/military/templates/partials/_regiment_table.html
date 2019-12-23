@@ -19,7 +19,7 @@
             {% if show_actions %}
                 <td>
                 <div class="row">
-                    <div class="col s4">
+                    <div class="col s12">
                     {% for action in regiment.battlefield_actions %}
                         {% if action == ba_move_left %}
                             <a class="waves-effect waves-light btn blue lighten-2"
@@ -46,11 +46,31 @@
                                 <img class="battle-action" alt="melee"
                                      src="{% static 'img/flaticon/freepik/melee-white.svg' %}"/>
                             </a>
-                        {% elif action == ba_long_range %}
+                         {% elif action == ba_long_range %}
                             <a class="waves-effect waves-light btn blue lighten-2"
                                href="{% url 'military:execute-battle-action-view' regiment.id action %}">
                                 <img class="battle-action" alt="long-range"
                                      src="{% static 'img/flaticon/freepik/arrows-white.svg' %}"/>
+                            </a>
+                        {% elif action == ba_switch_left %}
+                            <a class="waves-effect waves-light btn blue lighten-2"
+                               href="{% url 'military:execute-battle-action-view' regiment.id action %}">
+                                <i class="fas fa-arrow-left"></i> <i class="fas fa-sync-alt"></i>
+                            </a>
+                        {% elif action == ba_switch_right %}
+                            <a class="waves-effect waves-light btn blue lighten-2"
+                               href="{% url 'military:execute-battle-action-view' regiment.id action %}">
+                                <i class="fas fa-arrow-right"></i> <i class="fas fa-sync-alt"></i>
+                            </a>
+                        {% elif action == ba_switch_up %}
+                            <a class="waves-effect waves-light btn blue lighten-2"
+                               href="{% url 'military:execute-battle-action-view' regiment.id action %}">
+                                <i class="fas fa-arrow-up"></i> <i class="fas fa-sync-alt"></i>
+                            </a>
+                        {% elif action == ba_switch_down %}
+                            <a class="waves-effect waves-light btn blue lighten-2"
+                               href="{% url 'military:execute-battle-action-view' regiment.id action %}">
+                                <i class="fas fa-arrow-down"></i> <i class="fas fa-sync-alt"></i>
                             </a>
                         {% endif %}
                     {% empty %}

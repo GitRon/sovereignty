@@ -12,6 +12,11 @@ class RegimentActionService(object):
     # Attack
     ACTION_MELEE = 5
     ACTION_LONG_RANGE = 6
+    # Switch
+    ACTION_SWITCH_LEFT = 7
+    ACTION_SWITCH_UP = 8
+    ACTION_SWITCH_RIGHT = 9
+    ACTION_SWITCH_DOWN = 10
 
     battle = None
     battlefield = None
@@ -37,6 +42,14 @@ class RegimentActionService(object):
             self._execute_move_down_basic(regiment)
         elif action == self.ACTION_MELEE:
             self._execute_melee(regiment)
+        elif action == self.ACTION_SWITCH_LEFT:
+            self._execute_switch_left(regiment)
+        elif action == self.ACTION_SWITCH_RIGHT:
+            self._execute_switch_right(regiment)
+        elif action == self.ACTION_SWITCH_UP:
+            self._execute_switch_up(regiment)
+        elif action == self.ACTION_SWITCH_DOWN:
+            self._execute_switch_down(regiment)
         else:
             raise Exception(f'Tried to execute unknown action {action}.')
 
@@ -79,6 +92,7 @@ class RegimentActionService(object):
 
         return allowed_actions
 
+    # Movement
     def _execute_move_basic(self, regiment, action, x, y):
         if action not in self.det_basic_movement(regiment):
             raise Exception('Tried to execute invalid basic move action for regiment.')
@@ -99,6 +113,28 @@ class RegimentActionService(object):
     def _execute_move_down_basic(self, regiment):
         x, y = regiment.on_battlefield_tile.down_neighbour
         self._execute_move_basic(regiment, self.ACTION_MOVE_DOWN, x, y)
+
+    # Switch
+    def _execute_switch(self, regiment, action, x, y):
+        if action not in self.det_switch(regiment):
+            raise Exception('Tried to execute invalid switch action for regiment.')
+        self.battle_service.switch_regiments(regiment, x, y)
+
+    def _execute_switch_left(self, regiment):
+        x, y = regiment.on_battlefield_tile.left_neighbour
+        self._execute_switch(regiment, self.ACTION_SWITCH_LEFT, x, y)
+
+    def _execute_switch_right(self, regiment):
+        x, y = regiment.on_battlefield_tile.right_neighbour
+        self._execute_switch(regiment, self.ACTION_SWITCH_RIGHT, x, y)
+
+    def _execute_switch_up(self, regiment):
+        x, y = regiment.on_battlefield_tile.up_neighbour
+        self._execute_switch(regiment, self.ACTION_SWITCH_UP, x, y)
+
+    def _execute_switch_down(self, regiment):
+        x, y = regiment.on_battlefield_tile.down_neighbour
+        self._execute_switch(regiment, self.ACTION_SWITCH_DOWN, x, y)
 
     def calculate_melee_damage(self, attacker, target_list):
         """
@@ -153,8 +189,8 @@ class RegimentActionService(object):
 
             BattleLogEntry.objects.create(
                 battle=self.battle,
-                text=f'{attacker} attacked {target} with {round(corrected_attack_value, 2)*100}% of their men. '
-                f'They killed {killed_target_men} men and lost {killed_attacker_men}.')
+                text=f'{attacker} attacked {target} with {round(corrected_attack_value, 2) * 100}% of their men. '
+                     f'They killed {killed_target_men} men and lost {killed_attacker_men}.')
 
         self.battle.losses_attacker = losses_attacker
         self.battle.losses_defender = losses_defender
@@ -194,3 +230,29 @@ class RegimentActionService(object):
             return []
 
         return [self.ACTION_LONG_RANGE]
+
+    def det_switch(self, regiment):
+        from apps.military.models import Regiment
+
+        # Get all adjacent friendly units which still have enough morale...
+        tiles_with_allies = self.battle_service.get_allies_in_direct_plus_range(regiment)\
+            .filter(regiment__current_morale__gte=Regiment.BORDER_MORALE)
+
+        action_list = []
+        for tile in tiles_with_allies:
+            if tile.coordinate_x == regiment.on_battlefield_tile.coordinate_x - 1 and \
+                    tile.coordinate_y == regiment.on_battlefield_tile.coordinate_y:
+                action_list.append(self.ACTION_SWITCH_LEFT)
+            elif tile.coordinate_x == regiment.on_battlefield_tile.coordinate_x + 1 and \
+                    tile.coordinate_y == regiment.on_battlefield_tile.coordinate_y:
+                action_list.append(self.ACTION_SWITCH_RIGHT)
+            elif tile.coordinate_x == regiment.on_battlefield_tile.coordinate_x and \
+                    tile.coordinate_y == regiment.on_battlefield_tile.coordinate_y - 1:
+                action_list.append(self.ACTION_SWITCH_UP)
+            elif tile.coordinate_x == regiment.on_battlefield_tile.coordinate_x and \
+                    tile.coordinate_y == regiment.on_battlefield_tile.coordinate_y + 1:
+                action_list.append(self.ACTION_SWITCH_DOWN)
+
+        return action_list
+
+    # todo manual flee btn for units at the border

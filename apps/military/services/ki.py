@@ -1,4 +1,4 @@
-from apps.military.models import Battle, BattleLogEntry
+from apps.military.models import Battle, BattleLogEntry, Regiment
 from apps.military.services.battlefield import BattlefieldService
 
 
@@ -12,7 +12,6 @@ class KiService(object):
         self.battle = Battle.objects.get_current_battle(savegame=savegame)
         self.bs = BattlefieldService(self.savegame)
 
-
     # todo logic for different unit types
 
     def _move_fleeing_regiment(self, regiment, movement_on_x: int):
@@ -23,8 +22,21 @@ class KiService(object):
             # Move one tile on the x-axes towards the starting side
             if (regiment.county == self.battle.attacker and regiment_coordinate_x > 0) or \
                     (regiment.county == self.battle.defender and regiment_coordinate_x < self.bs.BATTLEFIELD_SIZE - 1):
-                self.bs.move_regiment(regiment, regiment_coordinate_x + movement_on_x,
-                                      regiment.on_battlefield_tile.coordinate_y)
+
+                target_x = regiment_coordinate_x + movement_on_x
+                target_y = regiment.on_battlefield_tile.coordinate_y
+                target_tile = self.bs.get_tile(target_x, target_y)
+                blocking_regiment = target_tile.regiment
+
+                # If target tile is not taken by other regiment, move there...
+                if not blocking_regiment:
+                    self.bs.move_regiment(regiment, target_x, target_y)
+                # If blocking regiment is from the same country and still has morale, switch regiments
+                else:
+                    if blocking_regiment.county == regiment.county and \
+                            blocking_regiment.current_morale > Regiment.BORDER_MORALE:
+                        self.bs.switch_regiments(regiment, target_x, target_y)
+
             # Remove regiment from battle
             else:
                 tile = regiment.on_battlefield_tile

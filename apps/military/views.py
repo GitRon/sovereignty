@@ -36,7 +36,10 @@ class RegimentTrainingView(generic.TemplateView):
         self.regiment = get_object_or_404(Regiment, pk=self.kwargs.pop('pk'), county__savegame=savegame)
         self.regiment_type = get_object_or_404(RegimentType, pk=self.kwargs.pop('type_id'))
 
+        # Set new type and reset men and morale
         self.regiment.type = self.regiment_type
+        self.regiment.current_men = Regiment.DEFAULT_REGIMENT_SIZE
+        self.regiment.morale = self.regiment_type.morale
         self.regiment.save()
 
         messages.add_message(self.request, messages.SUCCESS, f'Regiment successfully trained to {self.regiment_type}.')
@@ -67,6 +70,10 @@ class BattleView(generic.TemplateView):
         context['ba_move_down'] = RegimentActionService.ACTION_MOVE_DOWN
         context['ba_melee'] = RegimentActionService.ACTION_MELEE
         context['ba_long_range'] = RegimentActionService.ACTION_LONG_RANGE
+        context['ba_switch_left'] = RegimentActionService.ACTION_SWITCH_LEFT
+        context['ba_switch_right'] = RegimentActionService.ACTION_SWITCH_RIGHT
+        context['ba_switch_up'] = RegimentActionService.ACTION_SWITCH_UP
+        context['ba_switch_down'] = RegimentActionService.ACTION_SWITCH_DOWN
 
         return context
 
