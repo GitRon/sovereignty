@@ -63,6 +63,9 @@
                                 <li class="{% active request 'foreign-affairs' %}">
                                     <a href="#">Foreign Affairs</a>
                                 </li>
+                                <li class="{% active request 'castle' %}">
+                                    <a href="{% url 'castle:overview-view' %}">Castle</a>
+                                </li>
                                 <li class="{% active request 'court' %}">
                                     <a href="#">Court</a>
                                 </li>
@@ -90,7 +93,7 @@
 <footer class="page-footer">
     <div class="footer-copyright">
         <div class="container">
-            © 2019 Rum Microsystems
+            © 2018-{% now 'Y' %} Rum Microsystems
             <a class="grey-text text-lighten-4 right" href="{% url 'account:imprint-view' %}">Imprint</a>
         </div>
     </div>

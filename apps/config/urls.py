@@ -8,6 +8,7 @@ urlpatterns = [
     # Custom routes
     path('', include(('apps.account.urls', 'account'), namespace='account')),
     path('location/', include(('apps.location.urls', 'location'), namespace='location')),
+    path('castle/', include(('apps.castle.urls', 'castle'), namespace='castle')),
     path('dynasty/', include(('apps.dynasty.urls', 'dynasty'), namespace='dynasty')),
     path('message/', include(('apps.messaging.urls', 'message'), namespace='message')),
     path('military/', include(('apps.military.urls', 'military'), namespace='military')),

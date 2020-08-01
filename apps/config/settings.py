@@ -66,6 +66,7 @@ INSTALLED_APPS = [
 
     # Local
     'apps.account',
+    'apps.castle',
     'apps.config',
     'apps.core',
     'apps.dynasty',

@@ -41,3 +41,11 @@ class FinishYearService(object):
         for person in died_person_list:
             # todo only inform about closely related people
             self.ms.person_dies_natural_cause(person)
+
+    def _castle_maintenance(self):
+        # todo write test
+        county = self.savegame.playing_as.home_county
+        castle_maintenance = county.castle.upgrades.aggregate(sum='maintenance_cost')
+
+        county -= castle_maintenance
+        county.save()

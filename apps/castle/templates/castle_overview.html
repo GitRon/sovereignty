@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="row">
+        <div class="col s12">
+            <h1>My castle, {{ castle }}</h1>
+        </div>
+    </div>
+    <div class="row">
+        {% for upgrade in castle_upgrade_list %}
+            <div class="col s6 m3">
+                <div class="card {% if upgrade in castle.upgrades.all %}green lighten-1{% else %}grey hoverable cursor-pointer{% endif %}">
+                    <div class="card-content white-text">
+                        <span class="card-title">{{ upgrade }}</span>
+                        <p>
+                            {% if upgrade not in castle.upgrades.all %}
+                                <i class="right fa fa-coins"> {{ upgrade.building_cost }}</i>
+                            {% endif %}
+                            <i class="right fa fa-clock"> {{ upgrade.maintenance_cost }}</i>
+                            <i class="right fa fa-chess-rook"> {{ upgrade.defense_bonus }}</i>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
