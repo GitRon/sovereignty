@@ -1,7 +1,6 @@
 from django.core.management.base import BaseCommand
 
 from apps.account.models import Savegame
-from apps.location.services.map import MapService
 
 
 class Command(BaseCommand):

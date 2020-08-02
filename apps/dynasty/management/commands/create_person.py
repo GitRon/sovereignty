@@ -1,9 +1,8 @@
 from django.core.management.base import BaseCommand
 
 from apps.account.models import Savegame
-from apps.dynasty.models import Trait
-from apps.dynasty.services import PersonService
 from apps.dynasty import settings as ps
+from apps.dynasty.services import PersonService
 
 
 class Command(BaseCommand):

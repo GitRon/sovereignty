@@ -1,14 +1,8 @@
-from django.contrib import messages
-from django.urls import reverse
 from django.views import generic
 
 from apps.account.managers import SavegameManager
 from apps.account.models import Savegame
 from apps.castle.models import CastleUpgrade
-from apps.dynasty import settings as ps
-from apps.dynasty.forms import MarryForm
-from apps.dynasty.models import Person
-from apps.dynasty.services import MarriageService
 
 
 class CastleOverviewView(generic.TemplateView):
@@ -21,4 +15,3 @@ class CastleOverviewView(generic.TemplateView):
         context['castle'] = savegame.playing_as.home_county.castle
         context['castle_upgrade_list'] = CastleUpgrade.objects.all()
         return context
-

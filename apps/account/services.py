@@ -18,6 +18,8 @@ class FinishYearService(object):
         self._change_savegame()
         self._gather_resources()
         self._grim_reaper()
+        self._military_maintenance()
+        self._castle_maintenance()
 
     def _change_savegame(self):
         self.savegame.current_year += 1
@@ -25,12 +27,16 @@ class FinishYearService(object):
 
     def _gather_resources(self):
         county = self.savegame.playing_as.home_county
-        resource_gold = self.savegame.map.map_dots.filter(county=county).aggregate(sum_gold=Sum('gold'))
-        resource_manpower = self.savegame.map.map_dots.filter(county=county).aggregate(sum_manpower=Sum('manpower'))
+        resource_gold = self.savegame.map.map_dots.filter(county=county).aggregate(
+            sum_gold=Sum('gold'))['sum_gold']
+        resource_manpower = self.savegame.map.map_dots.filter(county=county).aggregate(
+            sum_manpower=Sum('manpower'))['sum_manpower']
 
-        county.gold += resource_gold['sum_gold']
-        county.manpower += resource_manpower['sum_manpower']
+        county.gold += resource_gold
+        county.manpower += resource_manpower
         county.save()
+
+        return resource_gold, resource_manpower
 
     def _grim_reaper(self):
 
@@ -42,10 +48,22 @@ class FinishYearService(object):
             # todo only inform about closely related people
             self.ms.person_dies_natural_cause(person)
 
+    def _military_maintenance(self):
+        # todo write test
+        county = self.savegame.playing_as.home_county
+        military_maintenance = county.regiments.aggregate(sum=Sum('type__costs'))['sum']
+
+        county.gold -= military_maintenance
+        county.save()
+
+        return military_maintenance
+
     def _castle_maintenance(self):
         # todo write test
         county = self.savegame.playing_as.home_county
-        castle_maintenance = county.castle.upgrades.aggregate(sum='maintenance_cost')
+        castle_maintenance = county.castle.upgrades.aggregate(sum=Sum('maintenance_cost'))['sum']
 
-        county -= castle_maintenance
+        county.gold -= castle_maintenance
         county.save()
+
+        return castle_maintenance

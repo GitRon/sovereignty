@@ -22,7 +22,12 @@
                         <td><a href="{% url 'dynasty:person-detail-view' person.id %}">{{ person }}</a></td>
                         <td>
                             {% if person.spouse %}
-                                <a href="{% url 'dynasty:person-detail-view' person.spouse.id %}">{{ person.spouse }}</a>
+                                {% if person.spouse in person_list %}
+                                    {{ person.spouse }}
+                                {% else %}
+                                    <a href="{% url 'dynasty:person-detail-view' person.spouse.id %}">
+                                        {{ person.spouse }}</a>
+                                {% endif %}
                             {% else %}
                                 -
                             {% endif %}

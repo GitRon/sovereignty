@@ -1,17 +1,11 @@
-import os
-import random
 from unittest import mock
 
-from django.db.models import Count
 from django.test import TestCase
 
 from apps.account.models import Savegame
-from apps.location.models import MapDot, Map
-from apps.location.services.country import CreateCountyService
-from apps.location.services.map import MapService
+from apps.dynasty import settings as ps
 from apps.naming.models import PersonName
 from apps.naming.services import PersonNameService, LocationNameService
-from apps.dynasty import settings as ps
 
 
 class NamingTest(TestCase):

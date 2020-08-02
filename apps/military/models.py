@@ -147,9 +147,9 @@ class BattlefieldTile(models.Model):
     regiment = models.OneToOneField(Regiment, null=True, blank=True, related_name='on_battlefield_tile',
                                     on_delete=models.SET_NULL)
     distance_weight_attacker = models.FloatField('Distance weight', default=0,
-                                             help_text='Weighted distance on attacker side')
+                                                 help_text='Weighted distance on attacker side')
     distance_weight_defender = models.FloatField('Distance weight', default=0,
-                                             help_text='Weighted distance on defender side')
+                                                 help_text='Weighted distance on defender side')
 
     objects = BattlefieldTileManager()
 

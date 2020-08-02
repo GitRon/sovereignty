@@ -136,8 +136,6 @@ class BattlefieldService(object):
 
     def initialize_battle(self, attacking_regiments, defending_regiments):
 
-        from apps.military.models import BattlefieldTile
-
         # Log which regiments are fighting this battle
         self.battle.attacker_regiments.set(attacking_regiments)
         self.battle.defender_regiments.set(defending_regiments)
@@ -179,7 +177,7 @@ class BattlefieldService(object):
 
         # Check if tile is taken
         if not self.battlefield.filter(regiment=regiment_active).exists() or not target_tile:
-            raise Exception(f'Cannot switch regiments because they are not both on the battlefield.')
+            raise Exception('Cannot switch regiments because they are not both on the battlefield.')
 
         regiment_passive = target_tile.regiment
 

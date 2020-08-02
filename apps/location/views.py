@@ -5,7 +5,9 @@ from django.views import generic
 
 from apps.account.managers import SavegameManager
 from apps.account.models import Savegame
+from apps.account.services import FinishYearService
 from apps.location.models import Map, MapDot, County
+from apps.location.services.country import CountyRulerService
 from apps.location.services.map import MapService
 
 
@@ -69,3 +71,24 @@ class MyCounty(generic.DetailView):
     def get_object(self, queryset=None):
         savegame = Savegame.objects.get(pk=SavegameManager.get_from_session(self.request))
         return savegame.playing_as.home_county
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        savegame = Savegame.objects.get(pk=SavegameManager.get_from_session(self.request))
+
+        crs = CountyRulerService(savegame, self.object)
+        context['line_of_succession'] = crs.get_succession_line()
+
+        fys = FinishYearService(SavegameManager.get_from_session(self.request))
+
+        # Income
+        context['income'], _ = fys._gather_resources()
+
+        # Expenses
+        context['expense_military'] = fys._military_maintenance()
+        context['expense_castle'] = fys._castle_maintenance()
+
+        context['balance'] = context['income'] - context['expense_military'] - context['expense_castle']
+
+        return context

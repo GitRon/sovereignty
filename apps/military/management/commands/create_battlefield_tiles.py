@@ -17,4 +17,4 @@ class Command(BaseCommand):
         bs = BattlefieldService(savegame)
         bs.create_battlefield_tiles()
 
-        print(f'Battlefield tiles created.')
+        print('Battlefield tiles created.')

@@ -23,12 +23,11 @@ class MarryForm(forms.Form):
         self.helper.layout = Layout(
             Div(
                 Div('my_person'),
-                Div('other_person')
-
-                , css_class='input-field col s12'),
+                Div('other_person'),
+                css_class='input-field col s12'),
             Div(
-                Submit('submit', 'Yes, I do!', css_class="btn")
-                , css_class='input-field col s12'),
+                Submit('submit', 'Yes, I do!', css_class="btn"),
+                css_class='input-field col s12'),
 
         )
 

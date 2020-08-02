@@ -30,6 +30,37 @@
                     <td>Ruler</td>
                     <td>{{ object.ruled_by.current_dynast }}</td>
                 </tr>
+                <tr>
+                    <td>Line of succession</td>
+                    <td>
+                        <ol>
+                            {% for person in line_of_succession %}
+                                <li><a href="{% url 'dynasty:person-detail-view' person.id %}">{{ person }}</a></li>
+                            {% endfor %}
+                        </ol>
+                    </td>
+                </tr>
             </table>
         </div>
+        <div class="col s6">
+            <table class="striped">
+                <tr>
+                    <td>Province income</td>
+                    <td>{{ income }}</td>
+                </tr>
+                <tr>
+                    <td>Military expenses</td>
+                    <td>-{{ expense_military }}</td>
+                </tr>
+                <tr>
+                    <td>Castle expenses</td>
+                    <td>-{{ expense_castle }}</td>
+                </tr>
+                <tr>
+                    <th>Balance</th>
+                    <th>{{ balance }}</th>
+                </tr>
+            </table>
+        </div>
+    </div>
 {% endblock %}

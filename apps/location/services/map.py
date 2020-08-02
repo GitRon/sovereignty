@@ -126,7 +126,7 @@ class MapService(object):
                 break
             county = self.draw_county()
             if not county:
-                print(f'No suitable space found for county capital. Stopping county creation.')
+                print('No suitable space found for county capital. Stopping county creation.')
                 self.assign_leftover_dots()
                 break
             county_list.append(county)

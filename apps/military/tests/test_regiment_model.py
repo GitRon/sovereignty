@@ -27,7 +27,7 @@ class RegimentModelTest(TestCase):
         cls.regiment_peasants = Regiment.objects.create(county=cls.county_1, name='1. Testington Peasants',
                                                         type=RegimentType.objects.get(name='Peasants'))
         cls.regiment_crossbowmen = Regiment.objects.create(county=cls.county_1, name='2. Testington Archers',
-                                                       type=RegimentType.objects.get(name='Crossbowmen'))
+                                                           type=RegimentType.objects.get(name='Crossbowmen'))
         cls.regiment_archers = Regiment.objects.create(county=cls.county_1, name='2. Testington Archers',
                                                        type=RegimentType.objects.get(name='Archers'))
         cls.regiment_spearmen = Regiment.objects.create(county=cls.county_1, name='2. Testington Spearmen',

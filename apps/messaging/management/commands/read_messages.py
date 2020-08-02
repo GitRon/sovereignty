@@ -1,6 +1,5 @@
 from django.core.management.base import BaseCommand
 
-from apps.dynasty.models import Person
 from apps.messaging.models import EventMessage
 
 

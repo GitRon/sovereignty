@@ -30,6 +30,7 @@ class PersonDetail(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['gender_male'] = ps.GENDER_MALE
+        context['title_claims'] = self.object.get_title_claims()
         return context
 
 
@@ -74,5 +75,3 @@ class MarryingFormView(generic.FormView):
 
     def get_success_url(self):
         return reverse('dynasty:marriage-view')
-
-

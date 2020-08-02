@@ -117,8 +117,8 @@ class Person(models.Model):
         return Person.objects.filter(Q(father=self) | Q(mother=self))
 
     def get_siblings_by_gender(self, gender):
-
-        return self.siblings.filter(gender=gender)
+        # todo write test!
+        return self.siblings.filter(gender=gender).exclude(id=self.id)
 
     def get_person_names(self):
         name_list = [self.first_name]
@@ -141,6 +141,19 @@ class Person(models.Model):
             name_list.append(child.get_person_names())
 
         return name_list
+
+    def get_title_claims(self):
+        # todo write test
+        from apps.location.services.country import CountyRulerService
+        claims = []
+        counties = County.objects.get_visible(savegame=self.savegame)
+        for county in counties:
+            crs = CountyRulerService(self.savegame, county)
+            line_of_succession = crs.get_succession_line()
+            if self in line_of_succession:
+                claims.append({'county': county, 'position': line_of_succession.index(self) + 1})
+
+        return claims
 
 
 @receiver(pre_save, sender=Person, dispatch_uid="person.set_death_year")

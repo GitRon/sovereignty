@@ -176,7 +176,7 @@ class DynastyService(object):
         # Otherwise he'll reaches adulthood
         else:
             dice = random.random()
-            death_age = 62 * pow(dice,  0.75) + 12
+            death_age = 62 * pow(dice,  0.5) + 12
 
         return birth_year + round(death_age)
 
@@ -241,7 +241,7 @@ class DynastyService(object):
 
 
 class MarriageService(object):
-    #todo write tests for these functions
+    # todo write tests for these functions
 
     ds = None
     savegame = None

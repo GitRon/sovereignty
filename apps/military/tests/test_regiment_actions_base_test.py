@@ -3,7 +3,7 @@ from django.test import TestCase
 from apps.account.models import Savegame
 from apps.dynasty.models import Dynasty
 from apps.location.models import County
-from apps.military.models import Regiment, BattlefieldTile, Battle, RegimentType
+from apps.military.models import Regiment, Battle, RegimentType
 from apps.military.services.battlefield import BattlefieldService
 from apps.military.services.regiment_actions import RegimentActionService
 

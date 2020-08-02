@@ -3,9 +3,8 @@ from unittest import mock
 from django.test import TestCase
 
 from apps.account.models import Savegame
-from apps.dynasty.models import Person, Dynasty
-from apps.dynasty.services import DynastyService, PersonService
 from apps.dynasty import settings as ps
+from apps.dynasty.services import DynastyService, PersonService
 
 
 class PersonTraitTest(TestCase):

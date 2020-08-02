@@ -27,7 +27,7 @@
                     <td>Age</td>
                     <td>
                         *{{ object.birth_year }}
-                        {% if object.death_year %}- &dagger; {{ object.death_year }} {% endif %}
+                        {% if object.death_year and object.death_year <= savegame.current_year %}- &dagger; {{ object.death_year }} {% endif %}
                         ({{ person.age }} years)
                     </td>
                 </tr>
@@ -82,6 +82,14 @@
                     <td>
                         {% for trait in object.traits.all %}
                             <div>{{ trait }}</div>
+                        {% endfor %}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Title claims</td>
+                    <td>
+                        {% for claim in title_claims %}
+                            <div>{{ claim.county }} ({{ claim.position }}.)</div>
                         {% endfor %}
                     </td>
                 </tr>

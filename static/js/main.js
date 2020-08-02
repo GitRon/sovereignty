@@ -1,3 +1,4 @@
 $(document).ready(function () {
-    $('.tabs').tabs();
+    // todo we need to fix this
+    //$('.tabs').tabs();
 });
