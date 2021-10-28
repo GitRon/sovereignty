@@ -1,4 +1,5 @@
 import os
+import random
 import tempfile
 import time
 from random import randrange
@@ -14,7 +15,7 @@ from apps.location.services.country import CreateCountyService
 from apps.naming.services import LocationNameService
 
 
-class MapService(object):
+class MapService:
     # Constants
     CANVAS_HEIGHT = 25
     CANVAS_WIDTH = 25
@@ -139,6 +140,13 @@ class MapService(object):
             print(f'County {county.name}: {county.map_dots.count()} dots.')
 
         return county_list
+
+    def set_player_county(self, county_list: list):
+        # todo make this work
+        random_country_number = random.randint(0, len(county_list))
+        self.savegame.playing_as = county_list[random_country_number].ruled_by
+        self.savegame.save()
+        print(f'Setting country "{self.savegame.playing_as.name}" as player county.')
 
     def save_image_in_map(self):
         if not settings.IS_TESTING:
@@ -295,6 +303,9 @@ class MapService(object):
 
         # Create counties
         self.populate_map_with_countries()
+
+        # Set player county
+        # self.set_player_county(county_list)
 
         # Create and save PNG map file
         self.save_image_in_map()

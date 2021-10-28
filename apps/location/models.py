@@ -90,6 +90,8 @@ class Map(models.Model):
 
 
 class MapDot(models.Model):
+    LEVEL_UPGRADE_FACTOR = 100
+
     TERRAIN_FIELDS = 1
     TERRAIN_PLAINS = 2
     TERRAIN_SWAMP = 3
@@ -118,6 +120,8 @@ class MapDot(models.Model):
     coordinate_y = models.IntegerField(db_index=True)
 
     # Resources
+    level = models.PositiveSmallIntegerField(default=1)
+
     gold = models.PositiveIntegerField(default=1)
     manpower = models.PositiveIntegerField(default=1)
 
@@ -137,3 +141,7 @@ class MapDot(models.Model):
             color = [0, 0, 0]
 
         return color
+
+    @property
+    def level_upgrade_price(self):
+        return (self.level + 1) * self.LEVEL_UPGRADE_FACTOR

@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.template.defaultfilters import date
+from django.templatetags.l10n import localize
 
 from apps.account.managers import SavegameManager
 
@@ -21,7 +22,7 @@ class Savegame(models.Model):
     objects = SavegameManager()
 
     def __str__(self):
-        date_str = date(self.created_at, 'd.m.Y H:i')
+        date_str = localize(date(self.created_at, 'd.m.Y H:i'))
         return f'#{self.id} - {date_str}'
 
     @property

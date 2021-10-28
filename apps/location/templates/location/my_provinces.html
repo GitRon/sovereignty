@@ -1,0 +1,43 @@
+{% extends "location/base_location.html" %}
+{% load static %}
+{% load utils %}
+
+{% block content %}
+    <div class="row">
+        <div class="col s12">
+            <h1>{{ province_list|length }} provinces</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12">
+            <table class="striped">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Level</th>
+                    <th>Income</th>
+                    <th>Manpower</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for province in province_list %}
+                    <tr>
+                        <td>#{{ province.id }}</td>
+                        <td>{{ province.level }}</td>
+                        <td>{{ province.gold }}</td>
+                        <td>{{ province.manpower }}</td>
+                        <td>
+                            {% if province.level_upgrade_price < savegame.playing_as.home_county.gold %}
+                                {# todo build view and validate money there as well: view increases gold and manpower #}
+                                <a class="waves-effect waves-light btn">
+                                    <i class="right fa fa-cogs"></i>Upgrade</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,9 @@
+{% load utils %}
+<div class="nav-content">
+    <ul class="tabs tabs-transparent">
+        <li class="tab {% active request 'county/my-county' %}">
+            <a href="{% url 'location:my-county-view' %}">My county</a></li>
+         <li class="tab {% active request 'county/my-provinces' %}">
+            <a href="{% url 'location:my-provinces-view' %}">My provinces</a></li>
+    </ul>
+</div>

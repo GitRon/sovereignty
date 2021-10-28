@@ -12,7 +12,7 @@ from apps.location.services.map import MapService
 
 
 class ShowMapDashboard(generic.TemplateView):
-    template_name = 'show_map.html'
+    template_name = 'location/show_map.html'
     canvas_map = None
 
     def dispatch(self, request, *args, **kwargs):
@@ -52,7 +52,7 @@ class ShowMapDashboard(generic.TemplateView):
 
 
 class MapDotDetail(generic.TemplateView):
-    template_name = 'partials/_map_detail.html'
+    template_name = 'location/partials/_map_detail.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -66,7 +66,7 @@ class MapDotDetail(generic.TemplateView):
 
 class MyCounty(generic.DetailView):
     model = County
-    template_name = 'my_county.html'
+    template_name = 'location/my_county.html'
 
     def get_object(self, queryset=None):
         savegame = Savegame.objects.get(pk=SavegameManager.get_from_session(self.request))
@@ -91,4 +91,18 @@ class MyCounty(generic.DetailView):
 
         context['balance'] = context['income'] - context['expense_military'] - context['expense_castle']
 
+        return context
+
+
+class MyProvincesView(generic.DetailView):
+    model = County
+    template_name = 'location/my_provinces.html'
+
+    def get_object(self, queryset=None):
+        savegame = Savegame.objects.get(pk=SavegameManager.get_from_session(self.request))
+        return savegame.playing_as.home_county
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['province_list'] = self.object.map_dots.all()
         return context
