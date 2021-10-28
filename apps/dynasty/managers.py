@@ -25,7 +25,9 @@ class DynastyManager(SavegameBasedObjectManager):
 class PersonQuerySet(models.QuerySet):
     def get_alive(self, savegame):
         # todo write test!
-        return self.filter(death_year__gte=savegame.current_year)
+
+        # todo maybe get the current year via F() from the person itself?
+        return self.filter(death_year__gt=savegame.current_year)
 
 
 class PersonManager(SavegameBasedObjectManager):
