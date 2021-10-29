@@ -411,7 +411,7 @@
     "model": "naming.personname",
     "pk": 52,
     "fields": {
-      "name": "Katherina",
+      "name": "Katharina",
       "gender": 2
     }
   },
@@ -605,6 +605,278 @@
     "fields": {
       "name": "Gustav",
       "gender": 1
+    }
+  },
+  {
+    "model": "naming.personname",
+    "pk": 77,
+    "fields": {
+      "name": "Friedrich",
+      "gender": 1
+    }
+  },
+  {
+    "model": "naming.personname",
+    "pk": 78,
+    "fields": {
+      "name": "Magdalena",
+      "gender": 2
+    }
+  },
+  {
+    "model": "naming.personname",
+    "pk": 79,
+    "fields": {
+      "name": "Bruno",
+      "gender": 1
+    }
+  },
+  {
+    "model": "naming.personname",
+    "pk": 80,
+    "fields": {
+      "name": "Ethel",
+      "gender": 2
+    }
+  },
+  {
+    "model": "naming.personname",
+    "pk": 81,
+    "fields": {
+      "name": "Utto",
+      "gender": 1
+    }
+  },
+  {
+    "model": "naming.personname",
+    "pk": 82,
+    "fields": {
+      "name": "Severin",
+      "gender": 1
+    }
+  },
+  {
+    "model": "naming.personname",
+    "pk": 83,
+    "fields": {
+      "name": "Theodor",
+      "gender": 1
+    }
+  },
+  {
+    "model": "naming.personname",
+    "pk": 84,
+    "fields": {
+      "name": "Lambert",
+      "gender": 1
+    }
+  },
+  {
+    "model": "naming.personname",
+    "pk": 85,
+    "fields": {
+      "name": "Sigisbert",
+      "gender": 1
+    }
+  },
+  {
+    "model": "naming.personname",
+    "pk": 86,
+    "fields": {
+      "name": "Liliana",
+      "gender": 2
+    }
+  },
+  {
+    "model": "naming.personname",
+    "pk": 87,
+    "fields": {
+      "name": "Burkhard",
+      "gender": 1
+    }
+  },
+  {
+    "model": "naming.personname",
+    "pk": 88,
+    "fields": {
+      "name": "Trudbert",
+      "gender": 1
+    }
+  },
+  {
+    "model": "naming.personname",
+    "pk": 89,
+    "fields": {
+      "name": "Ratbert",
+      "gender": 1
+    }
+  },
+  {
+    "model": "naming.personname",
+    "pk": 90,
+    "fields": {
+      "name": "Heinrich",
+      "gender": 1
+    }
+  },
+  {
+    "model": "naming.personname",
+    "pk": 91,
+    "fields": {
+      "name": "Adalgott",
+      "gender": 1
+    }
+  },
+  {
+    "model": "naming.personname",
+    "pk": 92,
+    "fields": {
+      "name": "Brigitta",
+      "gender": 2
+    }
+  },
+  {
+    "model": "naming.personname",
+    "pk": 93,
+    "fields": {
+      "name": "Valentina",
+      "gender": 2
+    }
+  },
+  {
+    "model": "naming.personname",
+    "pk": 94,
+    "fields": {
+      "name": "Valentin",
+      "gender": 1
+    }
+  },
+  {
+    "model": "naming.personname",
+    "pk": 95,
+    "fields": {
+      "name": "Anselm",
+      "gender": 1
+    }
+  },
+  {
+    "model": "naming.personname",
+    "pk": 96,
+    "fields": {
+      "name": "Bertha",
+      "gender": 2
+    }
+  },
+  {
+    "model": "naming.personname",
+    "pk": 97,
+    "fields": {
+      "name": "Ernestine",
+      "gender": 2
+    }
+  },
+  {
+    "model": "naming.personname",
+    "pk": 98,
+    "fields": {
+      "name": "Eleonore",
+      "gender": 2
+    }
+  },
+  {
+    "model": "naming.personname",
+    "pk": 99,
+    "fields": {
+      "name": "Flordelis",
+      "gender": 2
+    }
+  },
+  {
+    "model": "naming.personname",
+    "pk": 100,
+    "fields": {
+      "name": "Guda",
+      "gender": 2
+    }
+  },
+  {
+    "model": "naming.personname",
+    "pk": 101,
+    "fields": {
+      "name": "Hedwig",
+      "gender": 2
+    }
+  },
+  {
+    "model": "naming.personname",
+    "pk": 102,
+    "fields": {
+      "name": "Ida",
+      "gender": 2
+    }
+  },
+  {
+    "model": "naming.personname",
+    "pk": 103,
+    "fields": {
+      "name": "Konstanze",
+      "gender": 2
+    }
+  },
+  {
+    "model": "naming.personname",
+    "pk": 104,
+    "fields": {
+      "name": "Ludmilla",
+      "gender": 2
+    }
+  },
+  {
+    "model": "naming.personname",
+    "pk": 105,
+    "fields": {
+      "name": "Leopold",
+      "gender": 1
+    }
+  },
+  {
+    "model": "naming.personname",
+    "pk": 106,
+    "fields": {
+      "name": "Magnus",
+      "gender": 1
+    }
+  },
+  {
+    "model": "naming.personname",
+    "pk": 107,
+    "fields": {
+      "name": "Mathilde",
+      "gender": 2
+    }
+  },
+  {
+    "model": "naming.personname",
+    "pk": 108,
+    "fields": {
+      "name": "Philippa",
+      "gender": 2
+    }
+  },
+  {
+    "model": "naming.personname",
+    "pk": 109,
+    "fields": {
+      "name": "Melisande",
+      "gender": 2
+    }
+  },
+  {
+    "model": "naming.personname",
+    "pk": 110,
+    "fields": {
+      "name": "Veronika",
+      "gender": 2
     }
   },
   {
@@ -1024,7 +1296,56 @@
     "model": "naming.locationnameprefix",
     "pk": 60,
     "fields": {
+      "text": "Bib"
+    }
+  },
+  {
+    "model": "naming.locationnameprefix",
+    "pk": 61,
+    "fields": {
       "text": "Rung"
+    }
+  },
+  {
+    "model": "naming.locationnameprefix",
+    "pk": 62,
+    "fields": {
+      "text": "Bären"
+    }
+  },
+  {
+    "model": "naming.locationnameprefix",
+    "pk": 63,
+    "fields": {
+      "text": "Adler"
+    }
+  },
+  {
+    "model": "naming.locationnameprefix",
+    "pk": 64,
+    "fields": {
+      "text": "Münster"
+    }
+  },
+  {
+    "model": "naming.locationnameprefix",
+    "pk": 65,
+    "fields": {
+      "text": "Feld"
+    }
+  },
+  {
+    "model": "naming.locationnameprefix",
+    "pk": 65,
+    "fields": {
+      "text": "Kirch"
+    }
+  },
+  {
+    "model": "naming.locationnameprefix",
+    "pk": 66,
+    "fields": {
+      "text": "Vil"
     }
   },
   {
@@ -1431,6 +1752,27 @@
     "pk": 58,
     "fields": {
       "text": "hold"
+    }
+  },
+  {
+    "model": "naming.locationnamesuffix",
+    "pk": 59,
+    "fields": {
+      "text": "brugg"
+    }
+  },
+  {
+    "model": "naming.locationnamesuffix",
+    "pk": 60,
+    "fields": {
+      "text": "sach"
+    }
+  },
+  {
+    "model": "naming.locationnamesuffix",
+    "pk": 61,
+    "fields": {
+      "text": "moos"
     }
   }
 ]
