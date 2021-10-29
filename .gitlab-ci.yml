@@ -1,0 +1,76 @@
+image: docker:stable
+
+variables:
+  DOCKER_DRIVER: overlay2
+  IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+  DOCKER_HOST: tcp://localhost:2375
+  DOCKER_API_VERSION: "1.39"
+
+stages:
+  - lint
+#  - build
+  - test
+
+services:
+  - docker:18.09-dind
+
+lint:
+  image: python:3.9-slim
+  stage: lint
+  tags:
+    - low-load
+  script:
+    - pip install flake8 pep8-naming
+    - flake8
+
+security check backend:
+  image: python:3.9-slim
+  stage: lint
+  tags:
+    - low-load
+  script:
+    - pip install pipenv pipenv-to-requirements safety
+    - pipenv run pipenv_to_requirements -f
+    - safety check --file requirements.txt
+  allow_failure: true
+
+security check frontend:
+  image: node:14-alpine
+  stage: lint
+  tags:
+    - low-load
+  script:
+    # https://classic.yarnpkg.com/en/docs/cli/audit/#toc-yarn-audit - Only fail at "high" or "critical"
+    - yarn audit || if [ $? -lt 8 ]; then echo "success"; else exit 1; fi
+  allow_failure: true
+
+#build docker image:
+#  stage: build
+#  tags:
+#    - normal-load
+#  script:
+#    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+#    # https://docs.gitlab.com/ee/ci/docker/using_docker_build.html#using-docker-caching
+#    - docker pull $CI_REGISTRY_IMAGE:develop || true
+#    - docker build --compress --cache-from $CI_REGISTRY_IMAGE:develop -t $IMAGE_TAG .
+#    - docker push $IMAGE_TAG
+
+unittest:
+  stage: test
+  tags:
+    - normal-load
+  variables:
+    GIT_STRATEGY: none
+  before_script:
+    # login to registry:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+
+    # Start MariaDB container
+    - docker run --name portal-mysql -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=portal-test -e MYSQL_USER=portal -e MYSQL_PASSWORD=mypassword -d mariadb
+  script:
+    # Run tests
+    - sleep 10
+    - docker run --rm --link portal-mysql -e DJANGO_DATABASE_URL=mysql://root:password@portal-mysql/portal-test $IMAGE_TAG python manage.py test -v3 --noinput --failfast --parallel
+  after_script:
+    # Stop MariaDB container
+    - docker stop portal-mysql

@@ -8,7 +8,6 @@ from django.views import generic
 
 from apps.account.managers import SavegameManager
 from apps.account.models import Savegame
-from apps.account.services import FinishYearService
 from apps.location.models import Map, MapDot, County
 from apps.location.services.country import CountyRulerService
 from apps.location.services.map import MapService

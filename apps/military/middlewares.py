@@ -1,9 +1,9 @@
-from django.contrib import messages
-from django.shortcuts import redirect
-from django.urls import reverse
-
-from apps.account.managers import SavegameManager
-from apps.military.models import Battle
+# from django.contrib import messages
+# from django.shortcuts import redirect
+# from django.urls import reverse
+#
+# from apps.account.managers import SavegameManager
+# from apps.military.models import Battle
 
 
 class RedirectToActiveBattleMiddleware:
