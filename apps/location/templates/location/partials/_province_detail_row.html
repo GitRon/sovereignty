@@ -1,6 +1,7 @@
 <tr>
     <td>#{{ province.id }}</td>
     <td>{{ province.level }}</td>
+    <td>{{ province.terrain|default_if_none:'-' }}</td>
     <td>{{ province.gold }}</td>
     <td>{{ province.manpower }}</td>
     <td>

@@ -120,15 +120,18 @@ class ProvinceUpgradeView(generic.RedirectView):
     http_method_names = ('post',)
 
     def post(self, request, *args, **kwargs):
+        # Gather required objects
         savegame = Savegame.objects.get(pk=SavegameManager.get_from_session(self.request))
         obj = get_object_or_404(MapDot, pk=self.kwargs.get('pk', None))
-        MapDot.objects.upgrade_province(province=obj, savegame=savegame)
 
+        # Do upgrade
+        result = MapDot.objects.upgrade_province(province=obj, savegame=savegame)
+        toast = 'Upgraded province successfully' if result else 'Upgrade not possible'
+
+        # Build response
         response = render(request, 'location/partials/_province_detail_row.html',
                           {'province': obj, 'savegame': savegame})
-        response['HX-Trigger'] = json.dumps({
-            'refresh-my-gold': '-',
-            'show-toast': 'Upgraded province successfully'})
+        response['HX-Trigger'] = json.dumps({'refresh-my-gold': '-', 'show-toast': toast})
         return response
 
 
