@@ -126,8 +126,9 @@ class ProvinceUpgradeView(generic.RedirectView):
 
         response = render(request, 'location/partials/_province_detail_row.html',
                           {'province': obj, 'savegame': savegame})
-        # todo i don't need the manpower-trigger here, just left in to have a working example
-        response['HX-Trigger'] = json.dumps({"refresh-my-gold": "-", 'refresh-my-manpower': "-"})
+        response['HX-Trigger'] = json.dumps({
+            'refresh-my-gold': '-',
+            'show-toast': 'Upgraded province successfully'})
         return response
 
 

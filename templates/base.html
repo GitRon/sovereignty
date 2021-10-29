@@ -16,12 +16,16 @@
             {% for message in messages %}
                 M.toast({html: '{{ message }}'});
             {% endfor %}
+
+            document.body.addEventListener("show-toast", function (evt) {
+                M.toast({html: evt.detail.value});
+            })
         });
 
         // Add CSRF token to HTMX plugin for being able to make AJAX calls
         document.body.addEventListener('htmx:configRequest', (event) => {
             event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
-        })
+        });
     </script>
     {% block js %}{% endblock %}
     <link rel="stylesheet" href="{% static 'materialize-css/dist/css/materialize.css' %}">
