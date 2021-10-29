@@ -1,6 +1,9 @@
+import json
+
 from django.contrib import messages
 from django.db.models import Count
-from django.shortcuts import redirect
+from django.http import HttpResponse
+from django.shortcuts import redirect, get_object_or_404, render
 from django.views import generic
 
 from apps.account.managers import SavegameManager
@@ -80,16 +83,17 @@ class MyCounty(generic.DetailView):
         crs = CountyRulerService(savegame, self.object)
         context['line_of_succession'] = crs.get_succession_line()
 
-        fys = FinishYearService(SavegameManager.get_from_session(self.request))
-
+        # todo this actually changes the amounts!
+        # fys = FinishYearService(SavegameManager.get_from_session(self.request))
+        #
         # Income
-        context['income'], _ = fys._gather_resources()
-
-        # Expenses
-        context['expense_military'] = fys._military_maintenance()
-        context['expense_castle'] = fys._castle_maintenance()
-
-        context['balance'] = context['income'] - context['expense_military'] - context['expense_castle']
+        # context['income'], _ = fys._gather_resources()
+        #
+        # # Expenses
+        # context['expense_military'] = fys._military_maintenance()
+        # context['expense_castle'] = fys._castle_maintenance()
+        #
+        # context['balance'] = context['income'] - context['expense_military'] - context['expense_castle']
 
         return context
 
@@ -106,3 +110,34 @@ class MyProvincesView(generic.DetailView):
         context = super().get_context_data(**kwargs)
         context['province_list'] = self.object.map_dots.all()
         return context
+
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+
+class ProvinceUpgradeView(generic.RedirectView):
+    model = MapDot
+    http_method_names = ('post',)
+
+    def post(self, request, *args, **kwargs):
+        savegame = Savegame.objects.get(pk=SavegameManager.get_from_session(self.request))
+        obj = get_object_or_404(MapDot, pk=self.kwargs.get('pk', None))
+        MapDot.objects.upgrade_province(province=obj, savegame=savegame)
+
+        response = render(request, 'location/partials/_province_detail_row.html',
+                          {'province': obj, 'savegame': savegame})
+        # todo i don't need the manpower-trigger here, just left in to have a working example
+        response['HX-Trigger'] = json.dumps({"refresh-my-gold": "-", 'refresh-my-manpower': "-"})
+        return response
+
+
+class MyCountyGoldView(generic.View):
+    def get(self, request, *args, **kwargs):
+        savegame = Savegame.objects.get(pk=SavegameManager.get_from_session(self.request))
+        return HttpResponse(savegame.playing_as.home_county.gold, status=200)
+
+
+class MyCountyManpowerView(generic.View):
+    def get(self, request, *args, **kwargs):
+        savegame = Savegame.objects.get(pk=SavegameManager.get_from_session(self.request))
+        return HttpResponse(savegame.playing_as.home_county.manpower, status=200)

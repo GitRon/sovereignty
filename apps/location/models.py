@@ -90,7 +90,10 @@ class Map(models.Model):
 
 
 class MapDot(models.Model):
+    # todo rename / refactor to province
     LEVEL_UPGRADE_FACTOR = 100
+    LEVEL_GOLD_AVG = 10
+    LEVEL_MANPOWER_AVG = 25
 
     TERRAIN_FIELDS = 1
     TERRAIN_PLAINS = 2

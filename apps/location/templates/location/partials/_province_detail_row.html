@@ -1,0 +1,19 @@
+<tr>
+    <td>#{{ province.id }}</td>
+    <td>{{ province.level }}</td>
+    <td>{{ province.gold }}</td>
+    <td>{{ province.manpower }}</td>
+    <td>
+        {# todo refresh whole table and not just the row #}
+        {% if province.level_upgrade_price < savegame.playing_as.home_county.gold %}
+            <a class="waves-effect waves-light btn"
+               hx-post="{% url 'location:province-upgrade-view' province.id %}"
+               hx-target="closest tr"
+               hx-swap="outerHTML"
+               hx-confirm="Are you sure you want to upgrade this province for {{ province.level_upgrade_price }} 💰?">
+                <i class="right fa fa-cogs"></i>Upgrade
+            </a>
+            {# todo make toast to inform user about #}
+        {% endif %}
+    </td>
+</tr>

@@ -9,6 +9,7 @@
     <link rel="SHORTCUT ICON" href="{% static 'img/sovereignty.ico' %}">
     <script type="text/javascript" src="{% static 'jquery/dist/jquery.js' %}"></script>
     <script type="text/javascript" src="{% static 'materialize-css/dist/js/materialize.js' %}"></script>
+    <script type="text/javascript" src="{% static 'htmx.org/dist/htmx.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
     <script type="text/javascript">
         $(document).ready(function () {
@@ -16,6 +17,11 @@
                 M.toast({html: '{{ message }}'});
             {% endfor %}
         });
+
+        // Add CSRF token to HTMX plugin for being able to make AJAX calls
+        document.body.addEventListener('htmx:configRequest', (event) => {
+            event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+        })
     </script>
     {% block js %}{% endblock %}
     <link rel="stylesheet" href="{% static 'materialize-css/dist/css/materialize.css' %}">
@@ -42,12 +48,24 @@
                                 <li><a href=""><span class="badge red lighten-5">
                                 A.D. {{ savegame.current_year }}
                             </span></a></li>
-                                <li><a href=""><span class="new badge lime darken-1" data-badge-caption="Gold">
-                                {{ savegame.playing_as.home_county.gold }}
-                            </span></a></li>
-                                <li><a href=""><span class="new badge brown lighten-2" data-badge-caption="Manpower">
-                                 {{ savegame.playing_as.home_county.manpower }}
-                            </span></a></li>
+                                <li><a>
+                                    <span class="new badge lime darken-1"
+                                          data-badge-caption="💰"
+                                          hx-get="{% url 'location:my-county-gold-view' %}"
+                                          hx-trigger="refresh-my-gold from:body"
+                                          hx-swap="innerHTML">
+                                          {{ savegame.playing_as.home_county.gold }}
+                                    </span>
+                                </a></li>
+                                <li><a>
+                                    <span class="new badge brown lighten-2"
+                                          data-badge-caption="💂‍♂"
+                                          hx-get="{% url 'location:my-county-manpower-view' %}"
+                                          hx-trigger="refresh-my-manpower from:body"
+                                          hx-swap="innerHTML">
+                                         {{ savegame.playing_as.home_county.manpower }}
+                                    </span>
+                                </a></li>
                                 <li class="{% active request 'show-map' %}">
                                     <a href="{% url 'location:show-map-view' %}">Map</a>
                                 </li>

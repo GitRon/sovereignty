@@ -101,7 +101,7 @@ class BattleFinishRoundView(generic.TemplateView):
         battle.save()
 
         # Services
-        bs = BattlefieldService(battle.savegame)
+        # bs = BattlefieldService(battle.savegame)
 
         # Mark all regiments as 'turn done' for last round
         Regiment.objects.filter(on_battlefield_tile__savegame=battle.savegame).update(

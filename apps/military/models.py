@@ -178,8 +178,8 @@ class BattlefieldTile(models.Model):
 
     def _calculate_distance_weight_defender(self):
         from apps.military.services.battlefield import BattlefieldService
-        return abs(((BattlefieldService.BATTLEFIELD_SIZE - 1) / 2) - self.coordinate_y) + \
-               pow(BattlefieldService.BATTLEFIELD_SIZE - 1 - self.coordinate_x, 2)
+        return (abs(((BattlefieldService.BATTLEFIELD_SIZE - 1) / 2) - self.coordinate_y) +
+               pow(BattlefieldService.BATTLEFIELD_SIZE - 1 - self.coordinate_x, 2))
 
 
 @receiver(pre_save, sender=BattlefieldTile, dispatch_uid="battlefieldtile.set_base_distance_weight")
