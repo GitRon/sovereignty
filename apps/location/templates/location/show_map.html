@@ -2,19 +2,11 @@
 {% load static %}
 {% load utils %}
 
-{% block css %}
-    <style>
-        #map-container {
-            width: {{ canvas_map.display_size|add:48 }}px;
-            height: {{ canvas_map.display_size|add:48 }}px;
-        }
-    </style>
-{% endblock %}
-
 {% block js %}
     <script type="text/javascript">
         $(document).ready(function () {
             $('#map').click(function (e) {
+                {# todo we can remove this #}
                 let mapId = {{ canvas_map.id }};
                 let offset = $(this).offset();
                 let x = Math.round(e.pageX - offset.left);
@@ -38,7 +30,7 @@
     </div>
 
     <div class="row">
-        <div class="col s3">
+        <div class="col s6">
             <div id="map-container" class="card-panel grey lighten-2 z-depth-1">
                 <img id="map" width="{{ canvas_map.display_size }}"
                      height="{{ canvas_map.display_size }}" alt="Map #{{ canvas_map.id }}"

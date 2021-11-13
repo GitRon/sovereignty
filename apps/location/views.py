@@ -61,7 +61,10 @@ class MapDotDetail(generic.TemplateView):
 
         x = self.kwargs['x'] / Map.DISPLAY_FACTOR
         y = self.kwargs['y'] / Map.DISPLAY_FACTOR
-        context['map_dot'] = MapDot.objects.get(map=self.kwargs['map_id'], coordinate_x=x, coordinate_y=y)
+        try:
+            context['map_dot'] = MapDot.objects.get(map=self.kwargs['map_id'], coordinate_x=x, coordinate_y=y)
+        except MapDot.DoesNotExist:
+            return {}
 
         return context
 

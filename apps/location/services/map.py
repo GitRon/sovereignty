@@ -312,4 +312,4 @@ class MapService:
 
         # Final logging
         duration_seconds = f'{(time.time() - self.start_time):.2f}'
-        print(f'Map of size {self.get_map_size()} created in {duration_seconds}s.')
+        print(f'Map of size {self.get_map_size()} created in {duration_seconds}s. Savegame ID #{self.savegame.id}.')
